@@ -88,7 +88,18 @@ public class MatrixOperations {
                 break;
             }
         }
-        int scoreBonus = 50 * clearedRows.size() * clearedRows.size();
+
+        //new scoring logic
+        int linesCleared = clearedRows.size();
+        int scoreBonus = 0;
+
+        switch (linesCleared) {
+            case 1 -> scoreBonus = 100; //single
+            case 2 -> scoreBonus = 300; //double
+            case 3 -> scoreBonus = 500; //triple
+            case 4 -> scoreBonus = 800; //tetris
+            default -> scoreBonus = 0; //no lines cleared
+        }
         return new ClearRow(clearedRows.size(), tmp, scoreBonus);
     }
 
