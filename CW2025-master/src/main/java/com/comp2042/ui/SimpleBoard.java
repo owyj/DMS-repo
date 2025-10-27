@@ -1,5 +1,11 @@
-package com.comp2042;
+package com.comp2042.ui;
 
+import com.comp2042.logic.bricks.BrickRotator;
+import com.comp2042.logic.bricks.ClearRow;
+import com.comp2042.game.logic.Board;
+import com.comp2042.game.logic.MatrixOperations;
+import com.comp2042.game.logic.NextShapeInfo;
+import com.comp2042.game.logic.Score;
 import com.comp2042.logic.bricks.Brick;
 import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
