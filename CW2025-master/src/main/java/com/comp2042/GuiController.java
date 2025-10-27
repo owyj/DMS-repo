@@ -214,6 +214,7 @@ public class GuiController implements Initializable {
 
     public void bindScore(IntegerProperty integerProperty) {
         scoreLabel.textProperty().bind(integerProperty.asString("Score: %d"));
+        scoreLabel.setStyle("-fx-font-size: 20px;");
     }
 
     public void gameOver() {
