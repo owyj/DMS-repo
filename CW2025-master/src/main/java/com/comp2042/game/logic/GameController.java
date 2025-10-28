@@ -1,11 +1,9 @@
-package com.comp2042;
+package com.comp2042.game.logic;
 
-import com.comp2042.game.logic.Board;
-import com.comp2042.game.logic.DownData;
-import com.comp2042.game.logic.MoveEvent;
 import com.comp2042.input.EventSource;
 import com.comp2042.input.InputEventListener;
 import com.comp2042.logic.bricks.ClearRow;
+import com.comp2042.ui.GuiController;
 import com.comp2042.ui.SimpleBoard;
 import com.comp2042.ui.ViewData;
 

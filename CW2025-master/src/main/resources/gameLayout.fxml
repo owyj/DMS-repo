@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-<Pane fx:controller="com.comp2042.GuiController"
+<Pane fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml">
     <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
     <BorderPane styleClass="gameBoard" fx:id="gameBoard">
@@ -25,5 +25,5 @@
     </stylesheets>
     <Label fx:id="scoreLabel" text="Score: 0" styleClass="scoreClass"
            layoutX="240" layoutY="10"
-           style="-fx-font-size: 20px;"/>
+           style="-fx-font-size: 20px;"/> <!-- font alignment and size -->
 </Pane>

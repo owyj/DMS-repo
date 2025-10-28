@@ -1,13 +1,10 @@
-package com.comp2042;
+package com.comp2042.ui;
 
 import com.comp2042.game.logic.DownData;
 import com.comp2042.game.logic.MoveEvent;
 import com.comp2042.input.EventSource;
 import com.comp2042.input.EventType;
 import com.comp2042.input.InputEventListener;
-import com.comp2042.ui.GameOverPanel;
-import com.comp2042.ui.NotificationPanel;
-import com.comp2042.ui.ViewData;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -214,7 +211,7 @@ public class GuiController implements Initializable {
 
     public void bindScore(IntegerProperty integerProperty) {
         scoreLabel.textProperty().bind(integerProperty.asString("Score: %d"));
-        scoreLabel.setStyle("-fx-font-size: 20px;");
+        scoreLabel.setStyle("-fx-font-size: 20px;"); //font size
     }
 
     public void gameOver() {
