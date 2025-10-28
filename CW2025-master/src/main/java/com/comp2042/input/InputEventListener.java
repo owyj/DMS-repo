@@ -14,5 +14,7 @@ public interface InputEventListener {
 
     ViewData onRotateEvent(MoveEvent event);
 
+    DownData onInstantDropEvent(MoveEvent event); //Instant drop
+
     void createNewGame();
 }

@@ -27,7 +27,7 @@ public class StartMenuController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             //game scene
-            Scene gameScene = new Scene(root, 480, 700);
+            Scene gameScene = new Scene(root, 350, 500);
             stage.setScene(gameScene);
             stage.setTitle("TetrisJFX - Game");
 
@@ -51,12 +51,15 @@ public class StartMenuController {
                         "→ / D - Move Right\n" +
                         "↑ / W - Rotate\n" +
                         "↓ / S - Move Down\n" +
+                        "Space - Instant Drop\n" +
                         "N - New Game\n\n" +
                         "Scoring:\n" +
                         "Single Line: 100 points\n" +
                         "Double Line: 300 points\n" +
                         "Triple Line: 500 points\n" +
-                        "Tetris (4 lines): 800 points"
+                        "Tetris (4 lines): 800 points\n" +
+                        "Soft Drop: +1 point per cell\n" +
+                        "Hard Drop: +5 points per cell"
         );
         alert.showAndWait();
     }
