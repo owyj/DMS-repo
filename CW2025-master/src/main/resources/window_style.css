@@ -70,3 +70,29 @@
     -fx-fill: yellow;
     -fx-text-fill: yellow;
 }
+
+.titleStyle {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 72px;
+    -fx-text-fill: yellow;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 0, 0.8), 10, 0.5, 0, 0);
+}
+
+.menuButton {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 24px;
+    -fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0.0, 0, 3);
+}
+
+.menuButton:hover {
+    -fx-background-color: linear-gradient(#787878 0%, #333733 25%, #474847 75%, #858585 100%);
+    -fx-cursor: hand;
+}
+
+.menuButton:pressed {
+    -fx-background-color: linear-gradient(#585858 0%, #131713 25%, #272827 75%, #656565 100%);
+}
