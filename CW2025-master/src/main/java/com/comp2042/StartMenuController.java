@@ -54,6 +54,7 @@ public class StartMenuController {
 
                         "Space - Instant Drop\n" +
                         "C / SHIFT - Hold Piece\n" +
+                        "P - Pause Game\n" +
                         "N - New Game\n\n" +
 
                         "Scoring:\n\n" +

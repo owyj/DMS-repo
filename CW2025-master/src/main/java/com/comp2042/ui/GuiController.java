@@ -25,6 +25,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,6 +53,12 @@ public class GuiController implements Initializable {
 
     @FXML
     private GridPane holdPanel;
+
+    @FXML
+    private Button pauseButton;
+
+    @FXML
+    private VBox pauseOverlay;
 
     private Rectangle[][] holdRectangles;
 
@@ -94,6 +103,7 @@ public class GuiController implements Initializable {
                         instantDrop(new MoveEvent(EventType.INSTANT_DROP, EventSource.USER));
                         keyEvent.consume();
                     }
+                    //Brick hold key (C or Shift)
                     if (keyEvent.getCode() == KeyCode.C || keyEvent.getCode() == KeyCode.SHIFT) {
                         hold(new MoveEvent(EventType.HOLD, EventSource.USER));
                         keyEvent.consume();
@@ -101,6 +111,11 @@ public class GuiController implements Initializable {
                 }
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
+                }
+                // Pause key (P)
+                if (keyEvent.getCode() == KeyCode.P) {
+                    pauseGame(null);
+                    keyEvent.consume();
                 }
             }
         });
@@ -246,7 +261,49 @@ public class GuiController implements Initializable {
     }
 
     public void pauseGame(ActionEvent actionEvent) {
+        if (isGameOver.getValue() == Boolean.FALSE) {
+            if (isPause.getValue() == Boolean.FALSE) {
+                //Pause game
+                timeLine.pause();
+                isPause.setValue(Boolean.TRUE);
+                showPauseOverlay();
+            } else {
+                //Resume game
+                timeLine.play();
+                isPause.setValue(Boolean.FALSE);
+                hidePauseOverlay();
+            }
+        }
         gamePanel.requestFocus();
+    }
+
+    private void showPauseOverlay() {
+        if (pauseOverlay == null) {
+            pauseOverlay = new VBox();
+            pauseOverlay.setAlignment(javafx.geometry.Pos.CENTER);
+            pauseOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
+            pauseOverlay.setPrefSize(232, 500);
+            pauseOverlay.setLayoutX(0);
+            pauseOverlay.setLayoutY(0);
+
+            Label pauseLabel = new Label("PAUSED");
+            pauseLabel.setStyle("-fx-font-family: 'Let\\'s go Digital'; -fx-font-size: 48px; -fx-text-fill: yellow;");
+
+            Label resumeLabel = new Label("Press P to resume");
+            resumeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
+            pauseOverlay.getChildren().addAll(pauseLabel, resumeLabel);
+            pauseOverlay.setSpacing(20);
+        }
+
+        // Add to the root pane
+        ((Pane) gamePanel.getParent().getParent()).getChildren().add(pauseOverlay);
+    }
+
+    private void hidePauseOverlay() {
+        if (pauseOverlay != null) {
+            ((Pane) gamePanel.getParent().getParent()).getChildren().remove(pauseOverlay);
+        }
     }
 
     //Instant drop implementation
