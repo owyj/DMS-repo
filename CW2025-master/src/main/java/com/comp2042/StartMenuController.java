@@ -50,14 +50,18 @@ public class StartMenuController {
                         "← / A - Move Left\n" +
                         "→ / D - Move Right\n" +
                         "↑ / W - Rotate\n" +
-                        "↓ / S - Move Down\n" +
+                        "↓ / S - Move Down\n\n" +
+
                         "Space - Instant Drop\n" +
+                        "C / SHIFT - Hold Piece\n" +
                         "N - New Game\n\n" +
-                        "Scoring:\n" +
-                        "Single Line: 100 points\n" +
-                        "Double Line: 300 points\n" +
-                        "Triple Line: 500 points\n" +
-                        "Tetris (4 lines): 800 points\n" +
+
+                        "Scoring:\n\n" +
+                        "Single Line: +100 points\n" +
+                        "Double Line: +300 points\n" +
+                        "Triple Line: +500 points\n" +
+                        "Tetris (4 lines): +800 points\n\n" +
+
                         "Soft Drop: +1 point per cell\n" +
                         "Hard Drop: +5 points per cell"
         );

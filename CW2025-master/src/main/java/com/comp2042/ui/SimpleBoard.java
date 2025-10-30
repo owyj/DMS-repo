@@ -21,6 +21,8 @@ public class SimpleBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private Brick heldBrick = null;
+    private boolean canHold = true;
 
     public SimpleBoard(int width, int height) {
         this.width = width;
@@ -92,6 +94,7 @@ public class SimpleBoard implements Board {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point(4, 0);
+        canHold = true; //reset hold ability for new brick
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
@@ -102,7 +105,14 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        int[][] heldBrickData = heldBrick != null ? heldBrick.getShapeMatrix().get(0) : new int[4][4];
+        return new ViewData(
+                brickRotator.getCurrentShape(),
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY(),
+                brickGenerator.getNextBrick().getShapeMatrix().get(0),
+                heldBrickData //pass held brick data
+        );
     }
 
     @Override
@@ -123,11 +133,38 @@ public class SimpleBoard implements Board {
         return score;
     }
 
+    @Override
+    public Brick holdBrick() {
+        if (!canHold) {
+            return null; //cannot hold again until new brick
+        }
+        Brick currentBrick = brickRotator.getBrick();
+        Brick temp = heldBrick;
+        heldBrick = currentBrick;
+        canHold = false; //disable further holds until new brick
+        if (temp != null) {
+            //swap with held brick
+            brickRotator.setBrick(temp);
+        } else {
+            //first time holding, create new brick
+            Brick newBrick = brickGenerator.getBrick();
+            brickRotator.setBrick(newBrick);
+        }
+        currentOffset = new Point(4, 0);
+        return heldBrick;
+    }
+
+    @Override
+    public Brick getHeldBrick() {
+        return heldBrick;
+    }
 
     @Override
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();
+        heldBrick = null; //clear held brick
+        canHold = true;
         createNewBrick();
     }
 }

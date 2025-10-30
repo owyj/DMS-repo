@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+
 <Pane fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml">
     <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
@@ -20,10 +21,20 @@
             <GameOverPanel fx:id="gameOverPanel"/>
         </VBox>
     </Group>
+
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
+
+    <!-- Score font alignment and size -->
     <Label fx:id="scoreLabel" text="Score: 0" styleClass="scoreClass"
            layoutX="240" layoutY="10"
-           style="-fx-font-size: 20px;"/> <!-- font alignment and size -->
+           style="-fx-font-size: 20px;"
+    />
+
+    <!-- Hold Panel -->
+    <VBox layoutX="240" layoutY="100" spacing="5">
+        <Label text="HOLD" styleClass="nextBrickLabel"/>
+        <GridPane fx:id="holdPanel" vgap="1" hgap="1" styleClass="nextBrick"/>
+    </VBox>
 </Pane>

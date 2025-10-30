@@ -16,5 +16,7 @@ public interface InputEventListener {
 
     DownData onInstantDropEvent(MoveEvent event); //Instant drop
 
+    ViewData onHoldEvent(MoveEvent event); //piece storage
+
     void createNewGame();
 }

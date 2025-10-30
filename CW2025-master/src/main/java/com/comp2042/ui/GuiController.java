@@ -48,6 +48,11 @@ public class GuiController implements Initializable {
     @FXML
     private Label scoreLabel;
 
+    @FXML
+    private GridPane holdPanel;
+
+    private Rectangle[][] holdRectangles;
+
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
@@ -89,6 +94,10 @@ public class GuiController implements Initializable {
                         instantDrop(new MoveEvent(EventType.INSTANT_DROP, EventSource.USER));
                         keyEvent.consume();
                     }
+                    if (keyEvent.getCode() == KeyCode.C || keyEvent.getCode() == KeyCode.SHIFT) {
+                        hold(new MoveEvent(EventType.HOLD, EventSource.USER));
+                        keyEvent.consume();
+                    }
                 }
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
@@ -113,6 +122,8 @@ public class GuiController implements Initializable {
                 gamePanel.add(rectangle, j, i - 2);
             }
         }
+
+        initHoldPanel();
 
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
@@ -250,5 +261,37 @@ public class GuiController implements Initializable {
             refreshBrick(downData.getViewData());
         }
         gamePanel.requestFocus();
+    }
+
+    //Brick hold implementation
+    public void initHoldPanel() {
+        holdRectangles = new Rectangle[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                rectangle.setFill(Color.TRANSPARENT);
+                holdRectangles[i][j] = rectangle;
+                holdPanel.add(rectangle, j, i);
+            }
+        }
+    }
+
+    private void hold(MoveEvent event) {
+        if (isPause.getValue() == Boolean.FALSE) {
+            ViewData viewData = eventListener.onHoldEvent(event);
+            if (viewData != null) {
+                refreshBrick(viewData);
+                refreshHoldPanel(viewData.getHeldBrickData());
+            }
+        }
+        gamePanel.requestFocus();
+    }
+
+    private void refreshHoldPanel(int[][] heldBrick) {
+        for (int i = 0; i < heldBrick.length; i++) {
+            for (int j = 0; j < heldBrick[i].length; j++) {
+                setRectangleData(heldBrick[i][j], holdRectangles[i][j]);
+            }
+        }
     }
 }

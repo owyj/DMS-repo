@@ -2,6 +2,7 @@ package com.comp2042.game.logic;
 
 import com.comp2042.logic.bricks.ClearRow;
 import com.comp2042.ui.ViewData;
+import com.comp2042.logic.bricks.Brick;
 
 public interface Board {
 
@@ -26,4 +27,8 @@ public interface Board {
     Score getScore();
 
     void newGame();
+
+    Brick holdBrick();
+
+    Brick getHeldBrick();
 }
