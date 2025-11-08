@@ -60,6 +60,9 @@ public class GuiController implements Initializable {
     @FXML
     private VBox pauseOverlay;
 
+    @FXML
+    private GridPane ghostPanel;
+
     private Rectangle[][] holdRectangles;
 
     private Rectangle[][] displayMatrix;
@@ -73,6 +76,8 @@ public class GuiController implements Initializable {
     private final BooleanProperty isPause = new SimpleBooleanProperty();
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
+
+    private Rectangle[][] ghostRectangles;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -152,13 +157,33 @@ public class GuiController implements Initializable {
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
 
+        initGhostPanel(brick);
 
         timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
+                Duration.millis(500),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+    }
+
+    private void initGhostPanel(ViewData brick) {
+        ghostRectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
+        for (int i = 0; i < brick.getBrickData().length; i++) {
+            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                rectangle.setFill(Color.TRANSPARENT);
+                ghostRectangles[i][j] = rectangle;
+                if (ghostPanel == null) {
+                    ghostPanel = new GridPane();
+                    ghostPanel.setVgap(1);
+                    ghostPanel.setHgap(1);
+                    ((Pane) gamePanel.getParent()).getChildren().add(0, ghostPanel);
+                }
+                ghostPanel.add(rectangle, j, i);
+            }
+        }
+        refreshGhostPiece(brick);
     }
 
     private Paint getFillColor(int i) {
@@ -195,6 +220,13 @@ public class GuiController implements Initializable {
         return returnPaint;
     }
 
+    private Paint getGhostFillColor(int i) {
+        if (i == 0) {
+            return Color.TRANSPARENT;
+        }
+        // Return a semi-transparent white/gray for ghost piece
+        return Color.rgb(200, 200, 200, 0.3);
+    }
 
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
@@ -203,6 +235,29 @@ public class GuiController implements Initializable {
             for (int i = 0; i < brick.getBrickData().length; i++) {
                 for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
+                }
+            }
+            refreshGhostPiece(brick);
+        }
+    }
+
+    private void refreshGhostPiece(ViewData brick) {
+        if (ghostPanel != null) {
+            ghostPanel.setLayoutX(gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
+            ghostPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
+
+            for (int i = 0; i < brick.getBrickData().length; i++) {
+                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                    ghostRectangles[i][j].setFill(getGhostFillColor(brick.getBrickData()[i][j]));
+                    ghostRectangles[i][j].setArcHeight(9);
+                    ghostRectangles[i][j].setArcWidth(9);
+                    // Add a stroke to make it more visible
+                    if (brick.getBrickData()[i][j] != 0) {
+                        ghostRectangles[i][j].setStroke(Color.rgb(255, 255, 255, 0.5));
+                        ghostRectangles[i][j].setStrokeWidth(1);
+                    } else {
+                        ghostRectangles[i][j].setStroke(null);
+                    }
                 }
             }
         }
