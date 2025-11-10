@@ -63,6 +63,9 @@ public class GuiController implements Initializable {
     @FXML
     private GridPane ghostPanel;
 
+    @FXML
+    private Label highScoreLabel;
+
     private Rectangle[][] holdRectangles;
 
     private Rectangle[][] displayMatrix;
@@ -78,6 +81,10 @@ public class GuiController implements Initializable {
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
     private Rectangle[][] ghostRectangles;
+
+    private IntegerProperty currentScoreProperty;
+
+    private IntegerProperty currentHighScoreProperty;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -294,15 +301,24 @@ public class GuiController implements Initializable {
         this.eventListener = eventListener;
     }
 
-    public void bindScore(IntegerProperty integerProperty) {
-        scoreLabel.textProperty().bind(integerProperty.asString("Score: %d"));
-        scoreLabel.setStyle("-fx-font-size: 20px;"); //font size
+    public void bindScore(IntegerProperty scoreProperty, IntegerProperty highScoreProperty) {
+        this.currentScoreProperty = scoreProperty;
+        this.currentHighScoreProperty = highScoreProperty;
+
+        scoreLabel.textProperty().bind(scoreProperty.asString("Score: %d"));
+
+        highScoreLabel.textProperty().bind(highScoreProperty.asString("High Score: %d"));
     }
 
     public void gameOver() {
         timeLine.stop();
+
+        // Check if it's a new high score
+        boolean isNewHighScore = currentScoreProperty.getValue() > currentHighScoreProperty.getValue();
+
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
+        gameOverPanel.toFront();
     }
 
     public void newGame(ActionEvent actionEvent) {
@@ -342,7 +358,7 @@ public class GuiController implements Initializable {
             pauseOverlay.setLayoutY(0);
 
             Label pauseLabel = new Label("PAUSED");
-            pauseLabel.setStyle("-fx-font-family: 'Let\\'s go Digital'; -fx-font-size: 48px; -fx-text-fill: yellow;");
+            pauseLabel.setStyle("-fx-font-family: 'Let's go Digital'; -fx-font-size: 48px; -fx-text-fill: white;");
 
             Label resumeLabel = new Label("Press P to resume");
             resumeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");

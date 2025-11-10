@@ -29,7 +29,11 @@
     <!-- Score font alignment and size -->
     <Label fx:id="scoreLabel" text="Score: 0" styleClass="scoreClass"
            layoutX="240" layoutY="10"
-           style="-fx-font-size: 20px;"
+    />
+
+    <!-- High Score display -->
+    <Label fx:id="highScoreLabel" text="High Score: 0" styleClass="highScoreClass"
+           layoutX="240" layoutY="40"
     />
 
     <!-- Hold Panel -->

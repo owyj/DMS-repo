@@ -18,7 +18,7 @@ public class GameController implements InputEventListener {
         board.createNewBrick();
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
+        viewGuiController.bindScore(board.getScore().scoreProperty(), board.getScore().highScoreProperty());
     }
 
     @Override
@@ -32,6 +32,8 @@ public class GameController implements InputEventListener {
                 board.getScore().add(clearRow.getScoreBonus());
             }
             if (board.createNewBrick()) {
+                //Game over(save high score if applicable)
+                board.getScore().saveIfHighScore();
                 viewGuiController.gameOver();
             }
 
@@ -79,11 +81,12 @@ public class GameController implements InputEventListener {
             board.getScore().add(clearRow.getScoreBonus());
         }
 
-        //Add bonus points for hard drop (2 points per cell dropped)
+        //Add bonus points for hard drop (5 points per cell dropped)
         board.getScore().add(dropDistance * 5);
 
         //Create new brick
         if (board.createNewBrick()) {
+            board.getScore().saveIfHighScore();
             viewGuiController.gameOver();
         }
 

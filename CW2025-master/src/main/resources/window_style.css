@@ -30,7 +30,6 @@
     -fx-background-insets: 0, 1, 4, 5, 6;
     -fx-background-radius: 9, 8, 5, 4, 3;
     -fx-padding: 8;
-    /*-fx-font-family: "Helvetica";*/
     -fx-font-family: "Let's go Digital";
     -fx-font-size: 22px;
     -fx-font-weight: bold;
@@ -60,14 +59,13 @@
 
 .gameOverStyle {
     -fx-font-family: "Let's go Digital";
-    -fx-font-size: 37;
+    -fx-font-size: 37px;
     -fx-background-color: red;
 }
 
 .scoreClass{
     -fx-font-family: "Let's go Digital";
-    -fx-font-size: 38;
-    -fx-fill: yellow;
+    -fx-font-size: 20px;
     -fx-text-fill: yellow;
 }
 
@@ -95,4 +93,10 @@
 
 .menuButton:pressed {
     -fx-background-color: linear-gradient(#585858 0%, #131713 25%, #272827 75%, #656565 100%);
+}
+
+.highScoreClass {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 10px;
+    -fx-text-fill: yellow;
 }
