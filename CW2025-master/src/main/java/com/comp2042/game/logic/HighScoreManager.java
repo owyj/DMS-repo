@@ -8,12 +8,11 @@ import java.nio.file.Paths;
 public class HighScoreManager {
 
     private static final String HIGH_SCORE_FILE = "tetris_highscore.dat";
-    private static final String USER_HOME = System.getProperty("user.home");
     private static final String GAME_DIR = ".tetrisjfx";
 
     //Get the path to the high score file
     private static Path getHighScoreFilePath() {
-        Path gameDir = Paths.get(USER_HOME, GAME_DIR);
+        Path gameDir = Paths.get(GAME_DIR);
         try {
             //Create directory if it doesn't exist
             if (!Files.exists(gameDir)) {
