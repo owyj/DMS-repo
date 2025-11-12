@@ -66,6 +66,9 @@ public class GuiController implements Initializable {
     @FXML
     private Label highScoreLabel;
 
+    @FXML
+    private GridPane nextBrickPanel;
+
     private Rectangle[][] holdRectangles;
 
     private Rectangle[][] displayMatrix;
@@ -86,9 +89,11 @@ public class GuiController implements Initializable {
 
     private IntegerProperty currentHighScoreProperty;
 
+    private Label pauseLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
+        Font.loadFont(getClass().getClassLoader().getResourceAsStream("digital.ttf"), 38);
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -133,6 +138,20 @@ public class GuiController implements Initializable {
         });
         gameOverPanel.setVisible(false);
 
+        // Add "Next Brick" label above the next brick panel
+        Label nextBrickLabel = new Label("NEXT BRICK");
+        nextBrickLabel.getStyleClass().add("nextBrickLabel");
+
+        // Position the label above the nextBrickPanel
+        Pane parentPane = (Pane) nextBrickPanel.getParent();
+        if (parentPane != null) {
+            parentPane.getChildren().add(nextBrickLabel);
+
+            // Position the label relative to the nextBrickPanel
+            nextBrickLabel.layoutXProperty().bind(nextBrickPanel.layoutXProperty());
+            nextBrickLabel.layoutYProperty().bind(nextBrickPanel.layoutYProperty().subtract(40));
+        }
+
         final Reflection reflection = new Reflection();
         reflection.setFraction(0.8);
         reflection.setTopOpacity(0.9);
@@ -172,6 +191,8 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+
+        updateNextBrick(brick.getNextBrickData());
     }
 
     private void initGhostPanel(ViewData brick) {
@@ -245,6 +266,9 @@ public class GuiController implements Initializable {
                 }
             }
             refreshGhostPiece(brick);
+
+            // Update next brick display whenever the brick refreshes
+            updateNextBrick(brick.getNextBrickData());
         }
     }
 
@@ -359,8 +383,9 @@ public class GuiController implements Initializable {
 
             Label pauseLabel = new Label("PAUSED");
             pauseLabel.setStyle("-fx-font-family: 'Let's go Digital'; -fx-font-size: 48px; -fx-text-fill: white;");
+            pauseLabel.getStyleClass().add("pausedStyle");
 
-            Label resumeLabel = new Label("Press P to resume");
+            Label resumeLabel = new Label("Press 'P' to resume");
             resumeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
             pauseOverlay.getChildren().addAll(pauseLabel, resumeLabel);
@@ -368,7 +393,10 @@ public class GuiController implements Initializable {
         }
 
         // Add to the root pane
-        ((Pane) gamePanel.getParent().getParent()).getChildren().add(pauseOverlay);
+        Pane rootPane = (Pane) gamePanel.getParent().getParent();
+        rootPane.getChildren().add(pauseOverlay);
+        rootPane.getChildren().add(pauseLabel); // Add pauseLabel to the root pane
+        pauseLabel.toFront();
     }
 
     private void hidePauseOverlay() {
@@ -419,6 +447,20 @@ public class GuiController implements Initializable {
         for (int i = 0; i < heldBrick.length; i++) {
             for (int j = 0; j < heldBrick[i].length; j++) {
                 setRectangleData(heldBrick[i][j], holdRectangles[i][j]);
+            }
+        }
+    }
+
+    private void updateNextBrick(int[][] nextBrickData) {
+        nextBrickPanel.getChildren().clear(); // Clear current next brick display
+
+        for (int i = 0; i < nextBrickData.length; i++) {
+            for (int j = 0; j < nextBrickData[i].length; j++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                rectangle.setFill(getFillColor(nextBrickData[i][j]));
+                rectangle.setArcHeight(9);
+                rectangle.setArcWidth(9);
+                nextBrickPanel.add(rectangle, j, i);
             }
         }
     }
