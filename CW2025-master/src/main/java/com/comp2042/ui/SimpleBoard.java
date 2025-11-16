@@ -119,13 +119,33 @@ public class SimpleBoard implements Board {
     }
 
     private Point calculateGhostPosition() {
+        if (brickRotator.getCurrentShape() == null) {
+            return new Point(currentOffset);
+        }
+
         Point ghostPos = new Point(currentOffset);
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
+        int[][] currentBrick = brickRotator.getCurrentShape();
 
-        // Keep moving down until we hit something
-        while (!MatrixOperations.intersect(currentMatrix, brickRotator.getCurrentShape(),
-                (int) ghostPos.getX(), (int) ghostPos.getY() + 1)) {
-            ghostPos.translate(0, 1);
+        // Validate current position first
+        if (MatrixOperations.intersect(currentMatrix, currentBrick,
+                (int) ghostPos.getX(), (int) ghostPos.getY())) {
+            return new Point(currentOffset); // Fallback to current position
+        }
+
+        // Move down until collision is detected
+        while (true) {
+            Point nextPos = new Point(ghostPos);
+            nextPos.translate(0, 1);
+
+            boolean willCollide = MatrixOperations.intersect(currentMatrix, currentBrick,
+                    (int) nextPos.getX(), (int) nextPos.getY());
+
+            if (willCollide) {
+                break; // Found the landing position
+            }
+
+            ghostPos = nextPos; // Move to next position
         }
 
         return ghostPos;

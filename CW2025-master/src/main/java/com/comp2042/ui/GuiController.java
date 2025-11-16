@@ -253,7 +253,7 @@ public class GuiController implements Initializable {
             return Color.TRANSPARENT;
         }
         // Return a semi-transparent white/gray for ghost piece
-        return Color.rgb(200, 200, 200, 0.3);
+        return Color.rgb(255, 255, 255, 0.2);
     }
 
     private void refreshBrick(ViewData brick) {
@@ -273,21 +273,25 @@ public class GuiController implements Initializable {
     }
 
     private void refreshGhostPiece(ViewData brick) {
-        if (ghostPanel != null) {
+        if (ghostPanel != null && brick != null) {
             ghostPanel.setLayoutX(gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
             ghostPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
 
-            for (int i = 0; i < brick.getBrickData().length; i++) {
-                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                    ghostRectangles[i][j].setFill(getGhostFillColor(brick.getBrickData()[i][j]));
-                    ghostRectangles[i][j].setArcHeight(9);
-                    ghostRectangles[i][j].setArcWidth(9);
-                    // Add a stroke to make it more visible
-                    if (brick.getBrickData()[i][j] != 0) {
-                        ghostRectangles[i][j].setStroke(Color.rgb(255, 255, 255, 0.5));
-                        ghostRectangles[i][j].setStrokeWidth(1);
-                    } else {
-                        ghostRectangles[i][j].setStroke(null);
+            int[][] brickData = brick.getBrickData();
+            for (int i = 0; i < brickData.length; i++) {
+                for (int j = 0; j < brickData[i].length; j++) {
+                    if (i < ghostRectangles.length && j < ghostRectangles[i].length) {
+                        ghostRectangles[i][j].setFill(getGhostFillColor(brickData[i][j]));
+                        ghostRectangles[i][j].setArcHeight(9);
+                        ghostRectangles[i][j].setArcWidth(9);
+
+                        // Enhanced border for better visibility
+                        if (brickData[i][j] != 0) {
+                            ghostRectangles[i][j].setStroke(Color.rgb(180, 180, 180, 0.6));
+                            ghostRectangles[i][j].setStrokeWidth(1.5);
+                        } else {
+                            ghostRectangles[i][j].setStroke(null);
+                        }
                     }
                 }
             }
