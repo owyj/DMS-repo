@@ -8,7 +8,10 @@
 <?import java.net.URL?>
 
 <Pane fx:controller="com.comp2042.ui.GuiController"
-      xmlns:fx="http://javafx.com/fxml">
+      xmlns:fx="http://javafx.com/fxml" styleClass="game-background">
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
     <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
     <BorderPane styleClass="gameBoard" fx:id="gameBoard">
         <center>

@@ -5,10 +5,10 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<VBox alignment="CENTER" spacing="30"
+<VBox alignment="CENTER" spacing="90"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.comp2042.StartMenuController"
-      styleClass="root">
+      styleClass="menu-background">
 
     <stylesheets>
         <URL value="@window_style.css"/>
@@ -19,7 +19,7 @@
     <VBox alignment="CENTER" spacing="15">
         <Button text="Start Game" onAction="#startGame" styleClass="menuButton" prefWidth="200"/>
         <Button text="Instructions" onAction="#showInstructions" styleClass="menuButton" prefWidth="200"/>
-        <Button text="Exit" onAction="#exitGame" styleClass="menuButton" prefWidth="200"/>
+        <Button text="Exit" onAction="#exitGame" styleClass="menuButton" prefWidth="200" />
     </VBox>
 
     <padding>
