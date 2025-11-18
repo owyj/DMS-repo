@@ -29,4 +29,14 @@ public class BrickRotator {
     public Brick getBrick() {
         return brick;
     }
+
+    public NextShapeInfo peekNextShape() {
+        int nextShape = currentShape;
+        nextShape = (++nextShape) % brick.getShapeMatrix().size();
+        return new NextShapeInfo(brick.getShapeMatrix().get(nextShape), nextShape);
+    }
+
+    public int getCurrentRotation() {
+        return currentShape;
+    }
 }

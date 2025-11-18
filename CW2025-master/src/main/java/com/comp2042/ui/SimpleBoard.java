@@ -79,14 +79,65 @@ public class SimpleBoard implements Board {
     @Override
     public boolean rotateLeftBrick() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
-        NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(currentMatrix, nextShape.getShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-        if (conflict) {
-            return false;
-        } else {
+        NextShapeInfo nextShape = brickRotator.peekNextShape();
+
+        // First try normal rotation
+        boolean conflict = MatrixOperations.intersect(currentMatrix, nextShape.getShape(),
+                (int) currentOffset.getX(), (int) currentOffset.getY());
+
+        if (!conflict) {
             brickRotator.setCurrentShape(nextShape.getPosition());
             return true;
         }
+
+        // More extensive wall kicks for I-brick
+        Point[] wallKicks;
+
+        if (isIBrick()) {
+            wallKicks = new Point[]{
+                    new Point(1, 0), new Point(-1, 0), new Point(2, 0), new Point(-2, 0),
+                    new Point(0, -1), new Point(1, -1), new Point(-1, -1),
+                    new Point(0, -2), new Point(1, -2), new Point(-1, -2),
+                    new Point(0, 1), new Point(1, 1), new Point(-1, 1),
+                    new Point(2, -1), new Point(-2, -1), new Point(2, 1), new Point(-2, 1)
+            };
+        } else {
+            wallKicks = new Point[]{
+                    new Point(1, 0), new Point(-1, 0), new Point(0, -1),
+                    new Point(1, -1), new Point(-1, -1)
+            };
+        }
+
+        for (Point kick : wallKicks) {
+            Point testOffset = new Point(currentOffset);
+            testOffset.translate(kick.x, kick.y);
+
+            boolean kickConflict = MatrixOperations.intersect(currentMatrix, nextShape.getShape(),
+                    (int) testOffset.getX(), (int) testOffset.getY());
+
+            if (!kickConflict) {
+                brickRotator.setCurrentShape(nextShape.getPosition());
+                currentOffset = testOffset;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isIBrick() {
+        int[][] shape = brickRotator.getCurrentShape();
+        int nonZeroCount = 0;
+
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[i].length; j++) {
+                if (shape[i][j] != 0) {
+                    nonZeroCount++;
+                }
+            }
+        }
+
+        return nonZeroCount == 4; // I-brick has exactly 4 blocks
     }
 
     @Override
