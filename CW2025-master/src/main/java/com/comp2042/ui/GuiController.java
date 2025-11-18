@@ -5,6 +5,7 @@ import com.comp2042.game.logic.MoveEvent;
 import com.comp2042.input.EventSource;
 import com.comp2042.input.EventType;
 import com.comp2042.input.InputEventListener;
+import com.comp2042.game.logic.MusicManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -340,6 +341,8 @@ public class GuiController implements Initializable {
 
     public void gameOver() {
         timeLine.stop();
+        //pause music when game over
+        MusicManager.getInstance().pauseMusic();
 
         // Check if it's a new high score
         boolean isNewHighScore = currentScoreProperty.getValue() > currentHighScoreProperty.getValue();
@@ -352,6 +355,8 @@ public class GuiController implements Initializable {
     public void newGame(ActionEvent actionEvent) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
+        //resume music when starting new game
+        MusicManager.getInstance().playMusic();
         eventListener.createNewGame();
         gamePanel.requestFocus();
         timeLine.play();
@@ -362,13 +367,15 @@ public class GuiController implements Initializable {
     public void pauseGame(ActionEvent actionEvent) {
         if (isGameOver.getValue() == Boolean.FALSE) {
             if (isPause.getValue() == Boolean.FALSE) {
-                //Pause game
+                //Pause game and music
                 timeLine.pause();
+                MusicManager.getInstance().pauseMusic();
                 isPause.setValue(Boolean.TRUE);
                 showPauseOverlay();
             } else {
                 //Resume game
                 timeLine.play();
+                MusicManager.getInstance().playMusic();
                 isPause.setValue(Boolean.FALSE);
                 hidePauseOverlay();
             }
@@ -381,7 +388,7 @@ public class GuiController implements Initializable {
             pauseOverlay = new VBox();
             pauseOverlay.setAlignment(javafx.geometry.Pos.CENTER);
             pauseOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
-            pauseOverlay.setPrefSize(232, 500);
+            pauseOverlay.setPrefSize(225, 500);
             pauseOverlay.setLayoutX(0);
             pauseOverlay.setLayoutY(0);
 

@@ -1,6 +1,7 @@
 package com.comp2042;
 
 import com.comp2042.game.logic.GameController;
+import com.comp2042.game.logic.MusicManager;
 import com.comp2042.ui.GuiController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,11 @@ public class StartMenuController {
     @FXML
     private void startGame(ActionEvent event) {
         try {
+            // Load and start background music
+            MusicManager musicManager = MusicManager.getInstance();
+            musicManager.loadMusic();
+            musicManager.playMusic();
+
             //load game layout
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("gameLayout.fxml"));
             Parent root = fxmlLoader.load();
@@ -71,6 +77,8 @@ public class StartMenuController {
 
     @FXML
     private void exitGame(ActionEvent event) {
+        //stop music when exiting
+        MusicManager.getInstance().stopMusic();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
