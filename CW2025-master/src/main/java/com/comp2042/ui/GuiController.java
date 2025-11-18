@@ -260,7 +260,7 @@ public class GuiController implements Initializable {
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-            brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+            brickPanel.setLayoutY(-45 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
             for (int i = 0; i < brick.getBrickData().length; i++) {
                 for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
@@ -275,8 +275,8 @@ public class GuiController implements Initializable {
 
     private void refreshGhostPiece(ViewData brick) {
         if (ghostPanel != null && brick != null) {
-            ghostPanel.setLayoutX(gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
-            ghostPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
+            ghostPanel.setLayoutX(-1 + gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
+            ghostPanel.setLayoutY(-48 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
 
             int[][] brickData = brick.getBrickData();
             for (int i = 0; i < brickData.length; i++) {

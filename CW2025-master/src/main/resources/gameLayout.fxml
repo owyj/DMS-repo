@@ -40,7 +40,7 @@
     />
 
     <!-- Hold Panel -->
-    <VBox layoutX="240" layoutY="300" spacing="5">
+    <VBox layoutX="240" layoutY="295" spacing="5">
         <Label text="HOLD" styleClass="nextBrickLabel"/>
         <GridPane fx:id="holdPanel" vgap="1" hgap="1" styleClass="nextBrick"/>
     </VBox>

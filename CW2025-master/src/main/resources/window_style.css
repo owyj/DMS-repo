@@ -7,7 +7,7 @@
 
 .game-background {
     -fx-background-image: url("game_background.jpg");
-    -fx-background-size:; cover;
+    -fx-background-size: cover;
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
 }
