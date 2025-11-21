@@ -140,3 +140,16 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
+
+.levelClass {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 20px;
+    -fx-text-fill: cyan;
+    -fx-font-weight: bold;
+}
+
+.linesClass {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 16px;
+    -fx-text-fill: lightgreen;
+}

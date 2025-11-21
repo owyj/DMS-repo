@@ -40,14 +40,17 @@
     />
 
     <!-- Hold Panel -->
-    <VBox layoutX="240" layoutY="295" spacing="5">
+    <VBox layoutX="240" layoutY="355" spacing="5">
         <Label text="HOLD" styleClass="nextBrickLabel"/>
         <GridPane fx:id="holdPanel" vgap="1" hgap="1" styleClass="nextBrick"/>
     </VBox>
 
-    <!-- Pause Button -->
-    <Button text = "PAUSE" onAction="#pauseGame" styleClass="ipad-dark-grey" layoutX="240" layoutY="450" prefWidth="100"/>
-
     <!-- Next Brick Panel -->
     <GridPane fx:id="nextBrickPanel" layoutX="240" layoutY="100" vgap="1" hgap="1" styleClass="nextBrick"/>
+
+    <!-- Level Display -->
+    <VBox layoutX="80" layoutY="520" spacing="5" alignment="CENTER">
+        <Label fx:id="levelLabel" styleClass="levelClass"/>
+        <Label fx:id="linesLabel" styleClass="linesClass"/>
+    </VBox>
 </Pane>

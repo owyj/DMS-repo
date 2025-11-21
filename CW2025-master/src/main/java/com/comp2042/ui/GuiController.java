@@ -70,6 +70,12 @@ public class GuiController implements Initializable {
     @FXML
     private GridPane nextBrickPanel;
 
+    @FXML
+    private Label levelLabel;
+
+    @FXML
+    private Label linesLabel;
+
     private Rectangle[][] holdRectangles;
 
     private Rectangle[][] displayMatrix;
@@ -186,8 +192,9 @@ public class GuiController implements Initializable {
 
         initGhostPanel(brick);
 
+        int initialSpeed = 500; // Default speed
         timeLine = new Timeline(new KeyFrame(
-                Duration.millis(500),
+                Duration.millis(initialSpeed),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
@@ -330,13 +337,43 @@ public class GuiController implements Initializable {
         this.eventListener = eventListener;
     }
 
-    public void bindScore(IntegerProperty scoreProperty, IntegerProperty highScoreProperty) {
+    public void bindScore(IntegerProperty scoreProperty, IntegerProperty highScoreProperty,
+                          IntegerProperty levelProperty, IntegerProperty linesClearedProperty,
+                          IntegerProperty linesToNextLevelProperty) {
         this.currentScoreProperty = scoreProperty;
         this.currentHighScoreProperty = highScoreProperty;
 
         scoreLabel.textProperty().bind(scoreProperty.asString("Score: %d"));
-
         highScoreLabel.textProperty().bind(highScoreProperty.asString("High Score: %d"));
+
+        // display current level
+        if (levelLabel != null) {
+            levelLabel.textProperty().bind(levelProperty.asString("Level: %d"));
+        }
+
+        if (linesLabel != null) {
+            // show only total lines cleared
+            linesLabel.textProperty().bind(linesClearedProperty.asString("Lines Cleared: %d"));
+        }
+
+        // Add debug listeners to verify binding is working
+        if (levelProperty != null) {
+            levelProperty.addListener((obs, oldVal, newVal) -> {
+                System.out.println("DEBUG GUI: Level property changed from " + oldVal + " to " + newVal);
+            });
+        }
+
+        if (linesClearedProperty != null) {
+            linesClearedProperty.addListener((obs, oldVal, newVal) -> {
+                System.out.println("DEBUG GUI: Lines cleared property changed from " + oldVal + " to " + newVal);
+            });
+        }
+
+        if (linesToNextLevelProperty != null) {
+            linesToNextLevelProperty.addListener((obs, oldVal, newVal) -> {
+                System.out.println("DEBUG GUI: Lines to next level property changed from " + oldVal + " to " + newVal);
+            });
+        }
     }
 
     public void gameOver() {
@@ -355,8 +392,8 @@ public class GuiController implements Initializable {
     public void newGame(ActionEvent actionEvent) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
-        //resume music when starting new game
-        MusicManager.getInstance().playMusic();
+        //reset music when starting new game
+        MusicManager.getInstance().resetMusic();
         eventListener.createNewGame();
         gamePanel.requestFocus();
         timeLine.play();
@@ -472,6 +509,22 @@ public class GuiController implements Initializable {
                 rectangle.setArcHeight(9);
                 rectangle.setArcWidth(9);
                 nextBrickPanel.add(rectangle, j, i);
+            }
+        }
+    }
+
+    public void updateGameSpeed(int speedInMillis) {
+        if (timeLine != null) {
+            timeLine.stop();
+            timeLine = new Timeline(new KeyFrame(
+                    Duration.millis(speedInMillis),
+                    ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+            ));
+            timeLine.setCycleCount(Timeline.INDEFINITE);
+
+            // Only play if game is not paused and not over
+            if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
+                timeLine.play();
             }
         }
     }
