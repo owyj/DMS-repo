@@ -21,7 +21,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
 
         primaryStage.setTitle("TetrisJFX - Main Menu");
-        Scene scene = new Scene(root, 350, 500); //increased width and height to fit new layout
+        Scene scene = new Scene(root, 350, 600); //increased width and height to fit new layout
         primaryStage.setScene(scene);
         primaryStage.setResizable(false); //prevent resizing the window
 

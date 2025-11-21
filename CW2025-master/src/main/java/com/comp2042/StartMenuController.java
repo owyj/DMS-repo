@@ -33,7 +33,7 @@ public class StartMenuController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             //game scene
-            Scene gameScene = new Scene(root, 350, 500);
+            Scene gameScene = new Scene(root, 350, 600);
             stage.setScene(gameScene);
             stage.setTitle("TetrisJFX - Game");
 
@@ -42,7 +42,7 @@ public class StartMenuController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            showError("Failed to load game");
+            showError();
         }
     }
 
@@ -52,25 +52,28 @@ public class StartMenuController {
         alert.setTitle("Instructions");
         alert.setHeaderText("How to Play Tetris");
         alert.setContentText(
-                "Controls:\n\n" +
-                        "← / A - Move Left\n" +
-                        "→ / D - Move Right\n" +
-                        "↑ / W - Rotate\n" +
-                        "↓ / S - Move Down\n\n" +
-
-                        "Space - Instant Drop\n" +
-                        "C / SHIFT - Hold Piece\n" +
-                        "P - Pause Game\n" +
-                        "N - New Game\n\n" +
-
-                        "Scoring:\n\n" +
-                        "Single Line: +100 points\n" +
-                        "Double Line: +300 points\n" +
-                        "Triple Line: +500 points\n" +
-                        "Tetris (4 lines): +800 points\n\n" +
-
-                        "Soft Drop: +1 point per cell\n" +
-                        "Hard Drop: +5 points per cell"
+                """
+                        Controls:
+                        
+                        ← / A - Move Left
+                        → / D - Move Right
+                        ↑ / W - Rotate
+                        ↓ / S - Move Down
+                        
+                        Space - Instant Drop
+                        C / SHIFT - Hold Piece
+                        P - Pause Game
+                        N - New Game
+                        
+                        Scoring:
+                        
+                        Single Line: +100 points
+                        Double Line: +300 points
+                        Triple Line: +500 points
+                        Tetris (4 lines): +800 points
+                        
+                        Soft Drop: +1 point per cell
+                        Hard Drop: +5 points per cell"""
         );
         alert.showAndWait();
     }
@@ -83,11 +86,11 @@ public class StartMenuController {
         stage.close();
     }
 
-    private void showError(String message) {
+    private void showError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText("Failed to load game");
         alert.showAndWait();
     }
 }

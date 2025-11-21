@@ -80,6 +80,16 @@ public class MusicManager {
         }
     }
 
+    public void resetMusic() {
+        if (audioClip != null) {
+            audioClip.stop();
+            audioClip.setFramePosition(0); // Reset to beginning
+            audioClip.start();
+            isPlaying = true;
+            System.out.println("Music reset and restarted");
+        }
+    }
+
     public void setVolume(double volume) {
         if (audioClip != null && audioClip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
