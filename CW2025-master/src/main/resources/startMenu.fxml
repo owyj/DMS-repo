@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<VBox alignment="CENTER" spacing="90"
+<VBox alignment="CENTER" spacing="250"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.comp2042.StartMenuController"
       styleClass="menu-background">
@@ -23,6 +23,6 @@
     </VBox>
 
     <padding>
-        <Insets top="50" right="50" bottom="50" left="50"/>
+        <Insets top="70" right="50" bottom="50" left="50"/>
     </padding>
 </VBox>

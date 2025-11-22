@@ -55,11 +55,12 @@ public class MusicManager {
 
     public void playMusic() {
         if (audioClip != null && !isPlaying) {
+            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
             audioClip.start();
             isPlaying = true;
             System.out.println("Music started");
         } else if (audioClip == null) {
-            System.err.println("Cannot play music - audio clip not loaded");
+            System.err.println("Cannot play music");
         }
     }
 
@@ -84,9 +85,10 @@ public class MusicManager {
         if (audioClip != null) {
             audioClip.stop();
             audioClip.setFramePosition(0); // Reset to beginning
+            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
             audioClip.start();
             isPlaying = true;
-            System.out.println("Music reset and restarted");
+            System.out.println("Music restarted");
         }
     }
 
