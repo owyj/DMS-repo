@@ -29,6 +29,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -103,9 +109,25 @@ public class GuiController implements Initializable {
         Font.loadFont(getClass().getClassLoader().getResourceAsStream("digital.ttf"), 38);
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
+        setupGameOverPanel();
+
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
             @Override
             public void handle(KeyEvent keyEvent) {
+                // Always allow 'P' for pause and 'N' for new game (except when game is over)
+                if (keyEvent.getCode() == KeyCode.N && isPause.getValue() == Boolean.FALSE) {
+                    newGame(null);
+                    keyEvent.consume();
+                    return;
+                }
+                if (keyEvent.getCode() == KeyCode.P && isGameOver.getValue() == Boolean.FALSE) {
+                    pauseGame(null);
+                    keyEvent.consume();
+                    return;
+                }
+
+                // Only process game controls if not paused and not game over
                 if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
                     if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
                         refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
@@ -132,14 +154,6 @@ public class GuiController implements Initializable {
                         hold(new MoveEvent(EventType.HOLD, EventSource.USER));
                         keyEvent.consume();
                     }
-                }
-                if (keyEvent.getCode() == KeyCode.N) {
-                    newGame(null);
-                }
-                // Pause key (P)
-                if (keyEvent.getCode() == KeyCode.P) {
-                    pauseGame(null);
-                    keyEvent.consume();
                 }
             }
         });
@@ -353,7 +367,7 @@ public class GuiController implements Initializable {
 
         if (linesLabel != null) {
             // show only total lines cleared
-            linesLabel.textProperty().bind(linesClearedProperty.asString("Lines Cleared: %d"));
+            linesLabel.textProperty().bind(linesClearedProperty.asString("Lines: %d"));
         }
 
         // Add debug listeners to verify binding is working
@@ -387,6 +401,21 @@ public class GuiController implements Initializable {
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
         gameOverPanel.toFront();
+
+        // Position the game over panel to cover the game area
+        Pane rootPane = (Pane) gamePanel.getParent().getParent();
+        if (gameOverPanel.getParent() != rootPane) {
+            // Remove from current parent and add to root pane for proper positioning
+            if (gameOverPanel.getParent() != null) {
+                ((Pane) gameOverPanel.getParent()).getChildren().remove(gameOverPanel);
+            }
+            rootPane.getChildren().add(gameOverPanel);
+        }
+
+        // Set position and size to cover the game area
+        gameOverPanel.setLayoutX(0);
+        gameOverPanel.setLayoutY(0);
+        gameOverPanel.setPrefSize(rootPane.getWidth(), rootPane.getHeight());
     }
 
     public void newGame(ActionEvent actionEvent) {
@@ -422,34 +451,117 @@ public class GuiController implements Initializable {
 
     private void showPauseOverlay() {
         if (pauseOverlay == null) {
-            pauseOverlay = new VBox();
+            pauseOverlay = new VBox(20);
             pauseOverlay.setAlignment(javafx.geometry.Pos.CENTER);
-            pauseOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
-            pauseOverlay.setPrefSize(225, 500);
+            pauseOverlay.getStyleClass().add("pause-overlay");
+
+            // Set the overlay to cover the entire game area
+            Pane rootPane = (Pane) gamePanel.getParent().getParent();
+            pauseOverlay.setPrefSize(rootPane.getWidth(), rootPane.getHeight());
             pauseOverlay.setLayoutX(0);
             pauseOverlay.setLayoutY(0);
 
             Label pauseLabel = new Label("PAUSED");
-            pauseLabel.setStyle("-fx-font-family: 'Let's go Digital'; -fx-font-size: 48px; -fx-text-fill: white;");
-            pauseLabel.getStyleClass().add("pausedStyle");
+            pauseLabel.getStyleClass().add("pause-title");
 
             Label resumeLabel = new Label("Press 'P' to resume");
-            resumeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+            resumeLabel.getStyleClass().add("pause-subtitle");
 
-            pauseOverlay.getChildren().addAll(pauseLabel, resumeLabel);
-            pauseOverlay.setSpacing(20);
+            // Create menu buttons with consistent sizing
+            Button resumeButton = new Button("RESUME");
+            Button instructionsButton = new Button("INSTRUCTIONS");
+            Button exitButton = new Button("MAIN MENU");
+
+            // Apply CSS classes for consistent styling
+            resumeButton.getStyleClass().add("pause-button");
+            instructionsButton.getStyleClass().add("pause-button");
+            exitButton.getStyleClass().add("pause-button");
+
+            // Button actions
+            resumeButton.setOnAction(e -> pauseGame(null));
+            instructionsButton.setOnAction(e -> showInstructions());
+            exitButton.setOnAction(e -> exitToMainMenu());
+
+            pauseOverlay.getChildren().addAll(pauseLabel, resumeLabel, resumeButton, instructionsButton, exitButton);
+        } else {
+            // Update size in case window was resized
+            Pane rootPane = (Pane) gamePanel.getParent().getParent();
+            pauseOverlay.setPrefSize(rootPane.getWidth(), rootPane.getHeight());
         }
 
         // Add to the root pane
         Pane rootPane = (Pane) gamePanel.getParent().getParent();
-        rootPane.getChildren().add(pauseOverlay);
-        rootPane.getChildren().add(pauseLabel); // Add pauseLabel to the root pane
-        pauseLabel.toFront();
+        if (!rootPane.getChildren().contains(pauseOverlay)) {
+            rootPane.getChildren().add(pauseOverlay);
+        }
+        pauseOverlay.toFront();
     }
 
     private void hidePauseOverlay() {
         if (pauseOverlay != null) {
-            ((Pane) gamePanel.getParent().getParent()).getChildren().remove(pauseOverlay);
+            Pane rootPane = (Pane) gamePanel.getParent().getParent();
+            rootPane.getChildren().remove(pauseOverlay);
+        }
+    }
+
+    private void showInstructions() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Instructions");
+        alert.setHeaderText("How to Play Tetris");
+        alert.setContentText(
+                """
+                        Controls:
+                        
+                        ← / A - Move Left
+                        → / D - Move Right
+                        ↑ / W - Rotate
+                        ↓ / S - Move Down
+                        
+                        Space - Instant Drop
+                        C / SHIFT - Hold Piece
+                        P - Pause Game
+                        N - New Game
+                        
+                        Scoring:
+                        
+                        Single Line: +100 points
+                        Double Line: +300 points
+                        Triple Line: +500 points
+                        Tetris (4 lines): +800 points
+                        
+                        Soft Drop: +1 point per cell
+                        Hard Drop: +5 points per cell"""
+        );
+        alert.showAndWait();
+    }
+
+    private void exitToMainMenu() {
+        // Stop the game timeline
+        if (timeLine != null) {
+            timeLine.stop();
+        }
+
+        // Stop music
+        MusicManager.getInstance().stopMusic();
+
+        try {
+            // Load the start menu
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("startMenu.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) gamePanel.getScene().getWindow();
+
+            // Create and set the main menu scene
+            Scene menuScene = new Scene(root, 350, 600);
+            stage.setScene(menuScene);
+            stage.setTitle("TetrisJFX - Main Menu");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Fallback: just close the pause overlay
+            hidePauseOverlay();
+            isPause.setValue(Boolean.FALSE);
         }
     }
 
@@ -526,6 +638,13 @@ public class GuiController implements Initializable {
             if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
                 timeLine.play();
             }
+        }
+    }
+
+    private void setupGameOverPanel() {
+        if (gameOverPanel != null) {
+            gameOverPanel.setNewGameAction(e -> newGame(null));
+            gameOverPanel.setMainMenuAction(e -> exitToMainMenu());
         }
     }
 }
