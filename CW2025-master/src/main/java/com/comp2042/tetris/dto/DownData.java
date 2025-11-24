@@ -1,7 +1,4 @@
-package com.comp2042.game.logic;
-
-import com.comp2042.logic.bricks.ClearRow;
-import com.comp2042.ui.ViewData;
+package com.comp2042.tetris.dto;
 
 public final class DownData {
     private final ClearRow clearRow;
