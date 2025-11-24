@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<Pane fx:controller="com.comp2042.tetris.view.GuiController"
+<Pane fx:controller="com.comp2042.tetris.view.GameViewController"
       xmlns:fx="http://javafx.com/fxml" styleClass="game-background">
     <stylesheets>
         <URL value="@window_style.css"/>

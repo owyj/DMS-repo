@@ -2,7 +2,7 @@ package com.comp2042.tetris.dto;
 
 import com.comp2042.tetris.util.MatrixOperations;
 
-public final class ViewData {
+public final class GameStateView {
 
     private final int[][] brickData;
     private final int xPosition;
@@ -12,7 +12,7 @@ public final class ViewData {
     private final int ghostXPosition;
     private final int ghostYPosition;
 
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int[][] heldBrickData, int ghostXPosition, int ghostYPosition) {
+    public GameStateView(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int[][] heldBrickData, int ghostXPosition, int ghostYPosition) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;

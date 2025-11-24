@@ -1,32 +1,32 @@
 package com.comp2042.tetris.controller;
 
 import com.comp2042.tetris.model.LevelManager;
-import com.comp2042.tetris.dto.DownData;
+import com.comp2042.tetris.dto.MoveResultData;
 import com.comp2042.tetris.dto.MoveEvent;
 import com.comp2042.tetris.input.EventSource;
 import com.comp2042.tetris.input.InputEventListener;
 import com.comp2042.tetris.dto.ClearRow;
 import com.comp2042.tetris.model.Board;
-import com.comp2042.tetris.view.GuiController;
-import com.comp2042.tetris.model.SimpleBoard;
-import com.comp2042.tetris.dto.ViewData;
+import com.comp2042.tetris.view.GameViewController;
+import com.comp2042.tetris.model.GameBoard;
+import com.comp2042.tetris.dto.GameStateView;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(25, 10);
+    private Board board = new GameBoard(25, 10);
 
-    private final GuiController viewGuiController;
+    private final GameViewController viewGameViewController;
 
     private final LevelManager levelManager = new LevelManager();
 
-    public GameController(GuiController c) {
-        viewGuiController = c;
+    public GameController(GameViewController c) {
+        viewGameViewController = c;
         board.createNewBrick();
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
+        viewGameViewController.setEventListener(this);
+        viewGameViewController.initGameView(board.getBoardMatrix(), board.getViewData());
 
         // Pass level properties to GUI
-        viewGuiController.bindScore(
+        viewGameViewController.bindScore(
                 board.getScore().scoreProperty(),
                 board.getScore().highScoreProperty(),
                 levelManager.currentLevelProperty(),
@@ -39,7 +39,7 @@ public class GameController implements InputEventListener {
     }
 
     @Override
-    public DownData onDownEvent(MoveEvent event) {
+    public MoveResultData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
         ClearRow clearRow = null;
         if (!canMove) {
@@ -68,42 +68,42 @@ public class GameController implements InputEventListener {
             }
             if (board.createNewBrick()) {
                 board.getScore().saveIfHighScore();
-                viewGuiController.gameOver();
+                viewGameViewController.gameOver();
             }
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            viewGameViewController.refreshGameBackground(board.getBoardMatrix());
         } else {
             if (event.getEventSource() == EventSource.USER) {
                 board.getScore().add(1);
             }
         }
-        return new DownData(clearRow, board.getViewData());
+        return new MoveResultData(clearRow, board.getViewData());
     }
 
     private void updateGameSpeed() {
         int newSpeed = levelManager.getCurrentSpeed();
-        viewGuiController.updateGameSpeed(newSpeed);
+        viewGameViewController.updateGameSpeed(newSpeed);
     }
 
     @Override
-    public ViewData onLeftEvent(MoveEvent event) {
+    public GameStateView onLeftEvent(MoveEvent event) {
         board.moveBrickLeft();
         return board.getViewData();
     }
 
     @Override
-    public ViewData onRightEvent(MoveEvent event) {
+    public GameStateView onRightEvent(MoveEvent event) {
         board.moveBrickRight();
         return board.getViewData();
     }
 
     @Override
-    public ViewData onRotateEvent(MoveEvent event) {
+    public GameStateView onRotateEvent(MoveEvent event) {
         board.rotateLeftBrick();
         return board.getViewData();
     }
 
     @Override
-    public DownData onInstantDropEvent(MoveEvent event) {
+    public MoveResultData onInstantDropEvent(MoveEvent event) {
         //Keep moving down until it can't move anymore
         int dropDistance = 0;
         while (board.moveBrickDown()) {
@@ -136,12 +136,12 @@ public class GameController implements InputEventListener {
         //Create new brick
         if (board.createNewBrick()) {
             board.getScore().saveIfHighScore();
-            viewGuiController.gameOver();
+            viewGameViewController.gameOver();
         }
 
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGameViewController.refreshGameBackground(board.getBoardMatrix());
 
-        return new DownData(clearRow, board.getViewData());
+        return new MoveResultData(clearRow, board.getViewData());
     }
 
     @Override
@@ -149,13 +149,13 @@ public class GameController implements InputEventListener {
         board.newGame();
         levelManager.reset(); // reset level on new game
         updateGameSpeed(); // set initial game speed
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGameViewController.refreshGameBackground(board.getBoardMatrix());
     }
 
     @Override
-    public ViewData onHoldEvent(MoveEvent event) {
+    public GameStateView onHoldEvent(MoveEvent event) {
         board.holdBrick();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGameViewController.refreshGameBackground(board.getBoardMatrix());
         return board.getViewData();
     }
 }

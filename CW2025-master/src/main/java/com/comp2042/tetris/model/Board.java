@@ -1,7 +1,7 @@
 package com.comp2042.tetris.model;
 
 import com.comp2042.tetris.dto.ClearRow;
-import com.comp2042.tetris.dto.ViewData;
+import com.comp2042.tetris.dto.GameStateView;
 import com.comp2042.tetris.model.piece.Brick;
 
 public interface Board {
@@ -18,7 +18,7 @@ public interface Board {
 
     int[][] getBoardMatrix();
 
-    ViewData getViewData();
+    GameStateView getViewData();
 
     void mergeBrickToBackground();
 

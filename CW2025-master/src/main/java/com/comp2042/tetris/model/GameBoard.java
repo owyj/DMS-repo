@@ -3,15 +3,15 @@ package com.comp2042.tetris.model;
 import com.comp2042.tetris.model.piece.BrickRotator;
 import com.comp2042.tetris.dto.ClearRow;
 import com.comp2042.tetris.util.MatrixOperations;
-import com.comp2042.tetris.dto.NextShapeInfo;
+import com.comp2042.tetris.dto.NextBrickInfo;
 import com.comp2042.tetris.model.piece.Brick;
 import com.comp2042.tetris.model.piece.BrickGenerator;
 import com.comp2042.tetris.model.piece.RandomBrickGenerator;
-import com.comp2042.tetris.dto.ViewData;
+import com.comp2042.tetris.dto.GameStateView;
 
 import java.awt.*;
 
-public class SimpleBoard implements Board {
+public class GameBoard implements Board {
 
     private final int width;
     private final int height;
@@ -23,7 +23,7 @@ public class SimpleBoard implements Board {
     private Brick heldBrick = null;
     private boolean canHold = true;
 
-    public SimpleBoard(int width, int height) {
+    public GameBoard(int width, int height) {
         this.width = width;
         this.height = height;
         currentGameMatrix = new int[width][height];
@@ -78,7 +78,7 @@ public class SimpleBoard implements Board {
     @Override
     public boolean rotateLeftBrick() {
         int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
-        NextShapeInfo nextShape = brickRotator.peekNextShape();
+        NextBrickInfo nextShape = brickRotator.peekNextShape();
 
         // First try normal rotation
         boolean conflict = MatrixOperations.intersect(currentMatrix, nextShape.getShape(),
@@ -154,10 +154,10 @@ public class SimpleBoard implements Board {
     }
 
     @Override
-    public ViewData getViewData() {
+    public GameStateView getViewData() {
         int[][] heldBrickData = heldBrick != null ? heldBrick.getShapeMatrix().get(0) : new int[4][4];
         Point ghostPosition = calculateGhostPosition();
-        return new ViewData(
+        return new GameStateView(
                 brickRotator.getCurrentShape(),
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),

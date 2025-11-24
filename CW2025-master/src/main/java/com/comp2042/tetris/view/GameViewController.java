@@ -1,8 +1,8 @@
 package com.comp2042.tetris.view;
 
-import com.comp2042.tetris.dto.DownData;
+import com.comp2042.tetris.dto.MoveResultData;
 import com.comp2042.tetris.dto.MoveEvent;
-import com.comp2042.tetris.dto.ViewData;
+import com.comp2042.tetris.dto.GameStateView;
 import com.comp2042.tetris.input.EventSource;
 import com.comp2042.tetris.input.EventType;
 import com.comp2042.tetris.input.InputEventListener;
@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GuiController implements Initializable {
+public class GameViewController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
 
@@ -182,7 +182,7 @@ public class GuiController implements Initializable {
         reflection.setTopOffset(-12);
     }
 
-    public void initGameView(int[][] boardMatrix, ViewData brick) {
+    public void initGameView(int[][] boardMatrix, GameStateView brick) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
         for (int i = 2; i < boardMatrix.length; i++) {
             for (int j = 0; j < boardMatrix[i].length; j++) {
@@ -220,7 +220,7 @@ public class GuiController implements Initializable {
         updateNextBrick(brick.getNextBrickData());
     }
 
-    private void initGhostPanel(ViewData brick) {
+    private void initGhostPanel(GameStateView brick) {
         ghostRectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
@@ -281,7 +281,7 @@ public class GuiController implements Initializable {
         return Color.rgb(255, 255, 255, 0.2);
     }
 
-    private void refreshBrick(ViewData brick) {
+    private void refreshBrick(GameStateView brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
             brickPanel.setLayoutY(-45 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
@@ -297,7 +297,7 @@ public class GuiController implements Initializable {
         }
     }
 
-    private void refreshGhostPiece(ViewData brick) {
+    private void refreshGhostPiece(GameStateView brick) {
         if (ghostPanel != null && brick != null) {
             ghostPanel.setLayoutX(-1 + gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
             ghostPanel.setLayoutY(-48 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
@@ -339,13 +339,13 @@ public class GuiController implements Initializable {
 
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
-            DownData downData = eventListener.onDownEvent(event);
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
+            MoveResultData moveResultData = eventListener.onDownEvent(event);
+            if (moveResultData.getClearRow() != null && moveResultData.getClearRow().getLinesRemoved() > 0) {
+                NotificationPanel notificationPanel = new NotificationPanel("+" + moveResultData.getClearRow().getScoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             }
-            refreshBrick(downData.getViewData());
+            refreshBrick(moveResultData.getViewData());
         }
         gamePanel.requestFocus();
     }
@@ -571,13 +571,13 @@ public class GuiController implements Initializable {
     //Instant drop implementation
     private void instantDrop(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
-            DownData downData = eventListener.onInstantDropEvent(event);
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
+            MoveResultData moveResultData = eventListener.onInstantDropEvent(event);
+            if (moveResultData.getClearRow() != null && moveResultData.getClearRow().getLinesRemoved() > 0) {
+                NotificationPanel notificationPanel = new NotificationPanel("+" + moveResultData.getClearRow().getScoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             }
-            refreshBrick(downData.getViewData());
+            refreshBrick(moveResultData.getViewData());
         }
         gamePanel.requestFocus();
     }
@@ -597,10 +597,10 @@ public class GuiController implements Initializable {
 
     private void hold(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
-            ViewData viewData = eventListener.onHoldEvent(event);
-            if (viewData != null) {
-                refreshBrick(viewData);
-                refreshHoldPanel(viewData.getHeldBrickData());
+            GameStateView gameStateView = eventListener.onHoldEvent(event);
+            if (gameStateView != null) {
+                refreshBrick(gameStateView);
+                refreshHoldPanel(gameStateView.getHeldBrickData());
             }
         }
         gamePanel.requestFocus();

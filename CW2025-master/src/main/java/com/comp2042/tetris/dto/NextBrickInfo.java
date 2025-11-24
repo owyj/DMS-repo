@@ -2,12 +2,12 @@ package com.comp2042.tetris.dto;
 
 import com.comp2042.tetris.util.MatrixOperations;
 
-public final class NextShapeInfo {
+public final class NextBrickInfo {
 
     private final int[][] shape;
     private final int position;
 
-    public NextShapeInfo(final int[][] shape, final int position) {
+    public NextBrickInfo(final int[][] shape, final int position) {
         this.shape = shape;
         this.position = position;
     }

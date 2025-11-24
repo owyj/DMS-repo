@@ -1,16 +1,16 @@
 package com.comp2042.tetris.model.piece;
 
-import com.comp2042.tetris.dto.NextShapeInfo;
+import com.comp2042.tetris.dto.NextBrickInfo;
 
 public class BrickRotator {
 
     private Brick brick;
     private int currentShape = 0;
 
-    public NextShapeInfo getNextShape() {
+    public NextBrickInfo getNextShape() {
         int nextShape = currentShape;
         nextShape = (++nextShape) % brick.getShapeMatrix().size();
-        return new NextShapeInfo(brick.getShapeMatrix().get(nextShape), nextShape);
+        return new NextBrickInfo(brick.getShapeMatrix().get(nextShape), nextShape);
     }
 
     public int[][] getCurrentShape() {
@@ -30,10 +30,10 @@ public class BrickRotator {
         return brick;
     }
 
-    public NextShapeInfo peekNextShape() {
+    public NextBrickInfo peekNextShape() {
         int nextShape = currentShape;
         nextShape = (++nextShape) % brick.getShapeMatrix().size();
-        return new NextShapeInfo(brick.getShapeMatrix().get(nextShape), nextShape);
+        return new NextBrickInfo(brick.getShapeMatrix().get(nextShape), nextShape);
     }
 
     public int getCurrentRotation() {

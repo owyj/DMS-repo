@@ -2,7 +2,7 @@ package com.comp2042.tetris.app.controller;
 
 import com.comp2042.tetris.controller.GameController;
 import com.comp2042.tetris.util.MusicManager;
-import com.comp2042.tetris.view.GuiController;
+import com.comp2042.tetris.view.GameViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,7 @@ public class StartMenuController {
             //load game layout
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("gameLayout.fxml"));
             Parent root = fxmlLoader.load();
-            GuiController guiController = fxmlLoader.getController();
+            GameViewController gameViewController = fxmlLoader.getController();
 
             //current stage
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -38,7 +38,7 @@ public class StartMenuController {
             stage.setTitle("TetrisJFX - Game");
 
             //Initialize the game controller
-            new GameController(guiController);
+            new GameController(gameViewController);
 
         } catch (IOException e) {
             e.printStackTrace();
