@@ -1,5 +1,6 @@
-package com.comp2042.tetris.view;
+package com.comp2042.tetris.view.component;
 
+import com.comp2042.tetris.util.DialogHelper;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

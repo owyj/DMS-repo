@@ -1,5 +1,6 @@
 package com.comp2042.tetris.view;
 
+import com.comp2042.tetris.util.ColorMapper;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

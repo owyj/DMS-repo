@@ -1,6 +1,5 @@
-package com.comp2042.tetris.view;
+package com.comp2042.tetris.util;
 
-import com.comp2042.tetris.util.MusicManager;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

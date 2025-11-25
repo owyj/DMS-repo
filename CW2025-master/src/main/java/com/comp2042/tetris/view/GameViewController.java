@@ -1,7 +1,9 @@
 package com.comp2042.tetris.view;
 
+import com.comp2042.tetris.controller.GameStateManager;
 import com.comp2042.tetris.dto.*;
 import com.comp2042.tetris.input.*;
+import com.comp2042.tetris.util.SceneNavigator;
 import com.comp2042.tetris.view.component.*;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;

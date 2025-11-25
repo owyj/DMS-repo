@@ -1,4 +1,4 @@
-package com.comp2042.tetris.view;
+package com.comp2042.tetris.util;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;

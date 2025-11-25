@@ -1,4 +1,4 @@
-package com.comp2042.tetris.view;
+package com.comp2042.tetris.controller;
 
 import com.comp2042.tetris.util.MusicManager;
 import com.comp2042.tetris.view.component.GameOverPanel;
