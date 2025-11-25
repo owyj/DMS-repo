@@ -29,6 +29,4 @@ public interface Board {
     void newGame();
 
     Brick holdBrick();
-
-    Brick getHeldBrick();
 }

@@ -241,11 +241,6 @@ public class GameBoard implements Board {
     }
 
     @Override
-    public Brick getHeldBrick() {
-        return heldBrick;
-    }
-
-    @Override
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();

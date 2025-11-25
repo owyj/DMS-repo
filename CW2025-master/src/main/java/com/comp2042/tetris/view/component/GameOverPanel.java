@@ -34,15 +34,6 @@ public class GameOverPanel extends BorderPane {
         setCenter(container);
     }
 
-    // Getter methods for buttons so GuiController can set actions
-    public Button getNewGameButton() {
-        return newGameButton;
-    }
-
-    public Button getMainMenuButton() {
-        return mainMenuButton;
-    }
-
     public void setNewGameAction(javafx.event.EventHandler<ActionEvent> action) {
         newGameButton.setOnAction(action);
     }

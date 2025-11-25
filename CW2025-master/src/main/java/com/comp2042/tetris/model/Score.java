@@ -51,10 +51,4 @@ public final class Score {
         return HighScoreManager.checkAndSaveHighScore(score.getValue(), HighScoreManager.loadHighScore());
     }
 
-    // Check if current score is a new high score
-    public boolean isNewHighScore() {
-        int previousHighScore = HighScoreManager.loadHighScore();
-        return score.getValue() > previousHighScore;
-    }
-
 }

@@ -16,7 +16,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         URL location = getClass().getClassLoader().getResource("startMenu.fxml");
-        ResourceBundle resources = null;
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
 

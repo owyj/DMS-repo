@@ -79,18 +79,6 @@ public class LevelManager {
         return linesToNextLevel;
     }
 
-    public int getCurrentLevel() {
-        return currentLevel.get();
-    }
-
-    public int getTotalLinesCleared() {
-        return totalLinesCleared.get();
-    }
-
-    public int getLinesToNextLevel() {
-        return linesToNextLevel.get();
-    }
-
     public void reset() {
         currentLevel.set(STARTING_LEVEL);
         totalLinesCleared.set(0);
