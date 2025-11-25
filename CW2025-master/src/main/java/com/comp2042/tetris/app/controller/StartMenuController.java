@@ -41,8 +41,7 @@ public class StartMenuController {
             new GameController(gameViewController);
 
         } catch (IOException e) {
-            e.printStackTrace();
-            showError();
+            showError("Failed to load game.");
         }
     }
 
@@ -86,11 +85,11 @@ public class StartMenuController {
         stage.close();
     }
 
-    private void showError() {
+    private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText("Failed to load game");
+        alert.setContentText("message");
         alert.showAndWait();
     }
 }

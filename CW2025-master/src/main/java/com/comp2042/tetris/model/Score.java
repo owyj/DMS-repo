@@ -31,8 +31,11 @@ public final class Score {
         return highScore.getValue();
     }
 
-    public void add(int i){
-        score.setValue(score.getValue() + i);
+    public void add(int points) {
+        if (points < 0) {
+            throw new IllegalArgumentException("Points cannot be negative: " + points);
+        }
+        score.setValue(score.getValue() + points);
         // Update high score if current score exceeds it
         if (score.getValue() > highScore.getValue()) {
             highScore.setValue(score.getValue());

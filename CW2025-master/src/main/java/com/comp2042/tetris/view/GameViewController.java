@@ -46,6 +46,12 @@ public class GameViewController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
 
+    private static final int BRICK_PANEL_Y_OFFSET_INIT = -42;
+    private static final int BRICK_PANEL_Y_OFFSET_REFRESH = -45;
+    private static final int GHOST_PANEL_X_OFFSET = -1;
+    private static final int GHOST_PANEL_Y_OFFSET = -48;
+    private static final int NEXT_BRICK_LABEL_Y_OFFSET = 40;
+
     @FXML
     private GridPane gamePanel;
 
@@ -105,8 +111,6 @@ public class GameViewController implements Initializable {
 
     private IntegerProperty currentHighScoreProperty;
 
-    private Label pauseLabel;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResourceAsStream("digital.ttf"), 38);
@@ -162,18 +166,15 @@ public class GameViewController implements Initializable {
         });
         gameOverPanel.setVisible(false);
 
-        // Add "Next Brick" label above the next brick panel
         Label nextBrickLabel = new Label("NEXT BRICK");
         nextBrickLabel.getStyleClass().add("nextBrickLabel");
 
-        // Position the label above the nextBrickPanel
         Pane parentPane = (Pane) nextBrickPanel.getParent();
         if (parentPane != null) {
             parentPane.getChildren().add(nextBrickLabel);
 
-            // Position the label relative to the nextBrickPanel
             nextBrickLabel.layoutXProperty().bind(nextBrickPanel.layoutXProperty());
-            nextBrickLabel.layoutYProperty().bind(nextBrickPanel.layoutYProperty().subtract(40));
+            nextBrickLabel.layoutYProperty().bind(nextBrickPanel.layoutYProperty().subtract(NEXT_BRICK_LABEL_Y_OFFSET));
         }
 
         final Reflection reflection = new Reflection();
@@ -204,8 +205,8 @@ public class GameViewController implements Initializable {
                 brickPanel.add(rectangle, j, i);
             }
         }
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getXPosition() * brickPanel.getVgap() + brick.getXPosition() * BRICK_SIZE);
+        brickPanel.setLayoutY(BRICK_PANEL_Y_OFFSET_INIT + gamePanel.getLayoutY() + brick.getYPosition() * brickPanel.getHgap() + brick.getYPosition() * BRICK_SIZE);
 
         initGhostPanel(brick);
 
@@ -283,8 +284,8 @@ public class GameViewController implements Initializable {
 
     private void refreshBrick(GameStateView brick) {
         if (isPause.getValue() == Boolean.FALSE) {
-            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-            brickPanel.setLayoutY(-45 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getXPosition() * brickPanel.getVgap() + brick.getXPosition() * BRICK_SIZE);
+            brickPanel.setLayoutY(BRICK_PANEL_Y_OFFSET_REFRESH + gamePanel.getLayoutY() + brick.getYPosition() * brickPanel.getHgap() + brick.getYPosition() * BRICK_SIZE);
             for (int i = 0; i < brick.getBrickData().length; i++) {
                 for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
@@ -299,8 +300,8 @@ public class GameViewController implements Initializable {
 
     private void refreshGhostPiece(GameStateView brick) {
         if (ghostPanel != null && brick != null) {
-            ghostPanel.setLayoutX(-1 + gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
-            ghostPanel.setLayoutY(-48 + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
+            ghostPanel.setLayoutX(GHOST_PANEL_X_OFFSET + gamePanel.getLayoutX() + brick.getGhostXPosition() * ghostPanel.getVgap() + brick.getGhostXPosition() * BRICK_SIZE);
+            ghostPanel.setLayoutY(GHOST_PANEL_Y_OFFSET + gamePanel.getLayoutY() + brick.getGhostYPosition() * ghostPanel.getHgap() + brick.getGhostYPosition() * BRICK_SIZE);
 
             int[][] brickData = brick.getBrickData();
             for (int i = 0; i < brickData.length; i++) {
@@ -371,25 +372,6 @@ public class GameViewController implements Initializable {
         if (linesLabel != null) {
             // show only total lines cleared
             linesLabel.textProperty().bind(linesClearedProperty.asString("Lines: %d"));
-        }
-
-        // Add debug listeners to verify binding is working
-        if (levelProperty != null) {
-            levelProperty.addListener((obs, oldVal, newVal) -> {
-                System.out.println("DEBUG GUI: Level property changed from " + oldVal + " to " + newVal);
-            });
-        }
-
-        if (linesClearedProperty != null) {
-            linesClearedProperty.addListener((obs, oldVal, newVal) -> {
-                System.out.println("DEBUG GUI: Lines cleared property changed from " + oldVal + " to " + newVal);
-            });
-        }
-
-        if (linesToNextLevelProperty != null) {
-            linesToNextLevelProperty.addListener((obs, oldVal, newVal) -> {
-                System.out.println("DEBUG GUI: Lines to next level property changed from " + oldVal + " to " + newVal);
-            });
         }
     }
 

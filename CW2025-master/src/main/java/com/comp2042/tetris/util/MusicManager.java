@@ -20,19 +20,14 @@ public class MusicManager {
     }
 
     public void loadMusic() {
-        System.out.println("=== Loading Background Music ===");
 
         try {
 
             URL musicUrl = getClass().getClassLoader().getResource("TETRIS_PHONK.wav");
 
             if (musicUrl == null) {
-                System.err.println("TETRIS_PHONK.wav not found in classpath!");
-                System.err.println("Make sure the file is in src/main/resources/ directory");
                 return;
             }
-
-            System.out.println("Found music file: " + musicUrl);
 
             // Load the WAV file
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(musicUrl);
@@ -40,27 +35,15 @@ public class MusicManager {
             audioClip.open(audioInputStream);
             audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 
-            System.out.println("Music loaded successfully! Duration: " +
-                    (audioClip.getMicrosecondLength() / 1000000) + " seconds");
-
-        } catch (UnsupportedAudioFileException e) {
-            System.err.println("Unsupported audio format: " + e.getMessage());
-        } catch (LineUnavailableException e) {
-            System.err.println("Audio line unavailable: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Error loading music: " + e.getMessage());
-            e.printStackTrace();
+
         }
     }
 
     public void playMusic() {
         if (audioClip != null && !isPlaying) {
-            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
             audioClip.start();
             isPlaying = true;
-            System.out.println("Music started");
-        } else if (audioClip == null) {
-            System.err.println("Cannot play music");
         }
     }
 
@@ -68,7 +51,6 @@ public class MusicManager {
         if (audioClip != null && isPlaying) {
             audioClip.stop();
             isPlaying = false;
-            System.out.println("Music paused");
         }
     }
 
@@ -77,7 +59,6 @@ public class MusicManager {
             audioClip.stop();
             audioClip.close();
             isPlaying = false;
-            System.out.println("Music stopped");
         }
     }
 
@@ -88,7 +69,6 @@ public class MusicManager {
             audioClip.loop(Clip.LOOP_CONTINUOUSLY);
             audioClip.start();
             isPlaying = true;
-            System.out.println("Music restarted");
         }
     }
 

@@ -18,12 +18,21 @@ public class BrickRotator {
     }
 
     public void setCurrentShape(int currentShape) {
+        if (currentShape < 0) {
+            throw new IllegalArgumentException("Shape index cannot be negative");
+        }
+        if (brick != null && currentShape >= brick.getShapeMatrix().size()) {
+            throw new IllegalArgumentException("Shape index out of bounds: " + currentShape);
+        }
         this.currentShape = currentShape;
     }
 
     public void setBrick(Brick brick) {
+        if (brick == null) {
+            throw new IllegalArgumentException("Brick cannot be null");
+        }
         this.brick = brick;
-        currentShape = 0;
+        this.currentShape = 0;
     }
 
     public Brick getBrick() {
@@ -31,8 +40,7 @@ public class BrickRotator {
     }
 
     public NextBrickInfo peekNextShape() {
-        int nextShape = currentShape;
-        nextShape = (++nextShape) % brick.getShapeMatrix().size();
+        int nextShape = (currentShape + 1) % brick.getShapeMatrix().size();
         return new NextBrickInfo(brick.getShapeMatrix().get(nextShape), nextShape);
     }
 

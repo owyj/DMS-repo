@@ -26,9 +26,7 @@ public class Main extends Application {
         primaryStage.setResizable(false); //prevent resizing the window
 
         // Stop music when window is closed
-        primaryStage.setOnCloseRequest(event -> {
-            MusicManager.getInstance().stopMusic();
-        });
+        primaryStage.setOnCloseRequest(event -> MusicManager.getInstance().stopMusic());
 
         primaryStage.show();
     }

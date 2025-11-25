@@ -13,6 +13,9 @@ import com.comp2042.tetris.dto.GameStateView;
 
 public class GameController implements InputEventListener {
 
+    private static final int SOFT_DROP_POINTS = 1;
+    private static final int HARD_DROP_POINTS = 5;
+
     private Board board = new GameBoard(25, 10);
 
     private final GameViewController viewGameViewController;
@@ -46,22 +49,11 @@ public class GameController implements InputEventListener {
             board.mergeBrickToBackground();
             clearRow = board.clearRows();
 
-            System.out.println("DEBUG GameController: clearRow = " + clearRow);
-            if (clearRow != null) {
-                System.out.println("DEBUG GameController: clearRow.getLinesRemoved() = " + clearRow.getLinesRemoved());
-                System.out.println("DEBUG GameController: clearRow.getScoreBonus() = " + clearRow.getScoreBonus());
-            }
-
             if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-                System.out.println("DEBUG GameController: Clearing " + clearRow.getLinesRemoved() + " rows");
                 board.getScore().add(clearRow.getScoreBonus());
 
                 // Add cleared lines to level manager
-                System.out.println("DEBUG GameController: About to call levelManager.addLinesCleared()");
                 levelManager.addLinesCleared(clearRow.getLinesRemoved());
-                System.out.println("DEBUG GameController: After calling levelManager.addLinesCleared()");
-                System.out.println("DEBUG GameController: Current level = " + levelManager.getCurrentLevel());
-                System.out.println("DEBUG GameController: Total lines = " + levelManager.getTotalLinesCleared());
 
                 // Update game speed based on new level
                 updateGameSpeed();
@@ -73,7 +65,7 @@ public class GameController implements InputEventListener {
             viewGameViewController.refreshGameBackground(board.getBoardMatrix());
         } else {
             if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(1);
+                board.getScore().add(SOFT_DROP_POINTS);
             }
         }
         return new MoveResultData(clearRow, board.getViewData());
@@ -114,16 +106,10 @@ public class GameController implements InputEventListener {
         board.mergeBrickToBackground();
         ClearRow clearRow = board.clearRows();
 
-        System.out.println("DEBUG GameController instantDrop: clearRow = " + clearRow);
-        if (clearRow != null) {
-            System.out.println("DEBUG GameController instantDrop: clearRow.getLinesRemoved() = " + clearRow.getLinesRemoved());
-        }
-
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             board.getScore().add(clearRow.getScoreBonus());
 
             // Add cleared lines to level manager
-            System.out.println("DEBUG GameController instantDrop: About to call levelManager.addLinesCleared()");
             levelManager.addLinesCleared(clearRow.getLinesRemoved());
 
             // Update game speed based on new level
@@ -131,7 +117,7 @@ public class GameController implements InputEventListener {
         }
 
         //Add bonus points for hard drop (5 points per cell dropped)
-        board.getScore().add(dropDistance * 5);
+        board.getScore().add(dropDistance * HARD_DROP_POINTS);
 
         //Create new brick
         if (board.createNewBrick()) {

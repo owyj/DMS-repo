@@ -4,9 +4,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class LevelManager {
-    private final IntegerProperty currentLevel = new SimpleIntegerProperty(1);
+    private final IntegerProperty currentLevel = new SimpleIntegerProperty(STARTING_LEVEL);
     private final IntegerProperty totalLinesCleared = new SimpleIntegerProperty(0);
-    private final IntegerProperty linesToNextLevel = new SimpleIntegerProperty(4);
+    private final IntegerProperty linesToNextLevel = new SimpleIntegerProperty(LINES_PER_LEVEL);
+
+    private static final int MAX_LEVEL = 10;
+    private static final int LINES_PER_LEVEL = 4;
+    private static final int STARTING_LEVEL = 1;
 
     // Game speeds in milliseconds (faster as level increases)
     private static final int[] LEVEL_SPEEDS = {
@@ -18,40 +22,30 @@ public class LevelManager {
     }
 
     public void addLinesCleared(int lines) {
-        System.out.println("DEBUG: addLinesCleared called with lines = " + lines);
         if (lines > 0) {
-            int oldTotal = totalLinesCleared.get();
-            int newTotal = oldTotal + lines;
-            totalLinesCleared.set(newTotal);
-            System.out.println("DEBUG: Lines updated from " + oldTotal + " to " + newTotal);
-            System.out.println("DEBUG: Property value after set: " + totalLinesCleared.get());
+            totalLinesCleared.set(totalLinesCleared.get() + lines);
             checkLevelUp();
             updateLinesToNextLevel();
-        } else {
-            System.out.println("DEBUG: No lines to add (lines <= 0)");
         }
     }
 
     private void checkLevelUp() {
         int currentTotal = totalLinesCleared.get();
         int currentLvl = currentLevel.get();
-
-        // Check if we've reached the next level
         int requiredForNextLevel = calculateRequiredLines(currentLvl + 1);
 
-        while (currentTotal >= requiredForNextLevel && currentLvl < 10) {
+        while (currentTotal >= requiredForNextLevel && currentLvl < MAX_LEVEL) {
             currentLvl++;
             currentLevel.set(currentLvl);
-            System.out.println("DEBUG: LEVEL UP! Now Level: " + currentLevel.get() + ", Total Lines: " + currentTotal);
             requiredForNextLevel = calculateRequiredLines(currentLvl + 1);
         }
     }
 
     private int calculateRequiredLines(int level) {
-        // Level 1: 0 lines, Level 2: 4 lines, Level 3: 8 lines, Level 4: 12 lines, etc.
-        // Simple progression: 4 lines per level
-        if (level <= 1) return 0;
-        return (level - 1) * 4;
+        if (level <= STARTING_LEVEL) {
+            return 0;
+        }
+        return (level - STARTING_LEVEL) * LINES_PER_LEVEL;
     }
 
     private void updateLinesToNextLevel() {
@@ -60,21 +54,16 @@ public class LevelManager {
         int current = totalLinesCleared.get();
         int linesNeeded = requiredForNextLevel - current;
 
-        // If we're at max level or have cleared all lines needed
-        if (currentLvl >= 10 || linesNeeded <= 0) {
+        if (currentLvl >= MAX_LEVEL || linesNeeded <= 0) {
             linesToNextLevel.set(0);
         } else {
             linesToNextLevel.set(linesNeeded);
         }
-
-        System.out.println("DEBUG: Level " + currentLvl + " - Current lines: " + current + ", Need " + linesNeeded + " more lines for level " + (currentLvl + 1));
     }
 
     public int getCurrentSpeed() {
         int levelIndex = Math.min(currentLevel.get() - 1, LEVEL_SPEEDS.length - 1);
-        int speed = LEVEL_SPEEDS[levelIndex];
-        System.out.println("DEBUG: Current speed: " + speed + "ms for level " + currentLevel.get());
-        return speed;
+        return LEVEL_SPEEDS[levelIndex];
     }
 
     // Getters
@@ -103,9 +92,8 @@ public class LevelManager {
     }
 
     public void reset() {
-        currentLevel.set(1);
+        currentLevel.set(STARTING_LEVEL);
         totalLinesCleared.set(0);
         updateLinesToNextLevel();
-        System.out.println("DEBUG: LevelManager reset");
     }
 }

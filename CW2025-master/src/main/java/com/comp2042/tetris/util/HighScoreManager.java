@@ -10,21 +10,21 @@ public class HighScoreManager {
     private static final String HIGH_SCORE_FILE = "tetris_highscore.dat";
     private static final String GAME_DIR = ".tetrisjfx";
 
-    //Get the path to the high score file
+    // Get the path to the high score file
     private static Path getHighScoreFilePath() {
         Path gameDir = Paths.get(GAME_DIR);
         try {
-            //Create directory if it doesn't exist
+            // Create directory if it doesn't exist
             if (!Files.exists(gameDir)) {
                 Files.createDirectories(gameDir);
             }
         } catch (IOException e) {
-            System.err.println("Error creating game directory: " + e.getMessage());
+
         }
         return gameDir.resolve(HIGH_SCORE_FILE);
     }
 
-    //Load high score from file
+    // Load high score from file
     public static int loadHighScore() {
         Path filePath = getHighScoreFilePath();
 
@@ -38,15 +38,15 @@ public class HighScoreManager {
                 return Integer.parseInt(line.trim());
             }
         } catch (IOException e) {
-            System.err.println("Error reading high score: " + e.getMessage());
+
         } catch (NumberFormatException e) {
-            System.err.println("Invalid high score format: " + e.getMessage());
+
         }
 
         return 0;
     }
 
-    //Save high score to file
+    // Save high score to file
     public static boolean saveHighScore(int score) {
         Path filePath = getHighScoreFilePath();
 
@@ -54,12 +54,11 @@ public class HighScoreManager {
             writer.write(String.valueOf(score));
             return true;
         } catch (IOException e) {
-            System.err.println("Error saving high score: " + e.getMessage());
             return false;
         }
     }
 
-    //Check and update high score if current score is higher
+    // Check and update high score if current score is higher
     public static boolean checkAndSaveHighScore(int currentScore, int currentHighScore) {
         if (currentScore > currentHighScore) {
             saveHighScore(currentScore);
