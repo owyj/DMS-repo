@@ -15,14 +15,7 @@ public class RandomBrickGenerator implements BrickGenerator {
     private List<Brick> currentBag;
 
     public RandomBrickGenerator() {
-        brickList = new ArrayList<>();
-        brickList.add(new IBrick());
-        brickList.add(new JBrick());
-        brickList.add(new LBrick());
-        brickList.add(new OBrick());
-        brickList.add(new SBrick());
-        brickList.add(new TBrick());
-        brickList.add(new ZBrick());
+        brickList = BrickFactory.createAllBricks();
 
         currentBag = new ArrayList<>(brickList);
         Collections.shuffle(currentBag);
