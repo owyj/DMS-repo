@@ -39,6 +39,8 @@ public final class Score {
         // Update high score if current score exceeds it
         if (score.getValue() > highScore.getValue()) {
             highScore.setValue(score.getValue());
+            // save immediately to file when new high score is achieved
+            HighScoreManager.saveHighScore(score.getValue());
         }
     }
 
