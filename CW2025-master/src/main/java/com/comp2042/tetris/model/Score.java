@@ -44,6 +44,12 @@ public final class Score {
 
     public void reset() {
         score.setValue(0);
+        reloadHighScoreFromFile();
+    }
+
+    public void reloadHighScoreFromFile() {
+        int loadedHighScore = HighScoreManager.loadHighScore();
+        highScore.setValue(loadedHighScore);
     }
 
     // Save high score to file if current score is higher than previous high score

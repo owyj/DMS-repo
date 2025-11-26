@@ -133,6 +133,7 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
+        board.getScore().reloadHighScoreFromFile(); // force reload after new game
         levelManager.reset(); // reset level on new game
         updateGameSpeed(); // set initial game speed
         viewGameViewController.refreshGameBackground(board.getBoardMatrix());
