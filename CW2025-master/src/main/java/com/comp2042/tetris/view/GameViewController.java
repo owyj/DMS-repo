@@ -130,8 +130,8 @@ public class GameViewController implements Initializable {
 
         gamePanel.setOnKeyPressed(keyEvent ->
                 inputHandler.handleKeyPress(keyEvent,
-                        gameStateManager.isPaused(),
-                        gameStateManager.isGameOver())
+                        gameStateManager.canMove(),
+                        gameStateManager.canPause())
         );
     }
 
@@ -164,10 +164,10 @@ public class GameViewController implements Initializable {
     }
 
     public void pauseGame(ActionEvent actionEvent) {
-        if (!gameStateManager.isGameOver()) {
+        if (gameStateManager.canPause()) {
             gameStateManager.togglePause();
 
-            if (gameStateManager.isPaused()) {
+            if (!gameStateManager.canMove()) {
                 pauseOverlayManager.show();
             } else {
                 pauseOverlayManager.hide();
@@ -183,7 +183,7 @@ public class GameViewController implements Initializable {
     }
 
     private void moveDown(MoveEvent event) {
-        if (!gameStateManager.isPaused()) {
+        if (gameStateManager.canMove()) {
             MoveResultData result = eventListener.onDownEvent(event);
             handleMoveResult(result);
         }
@@ -191,7 +191,7 @@ public class GameViewController implements Initializable {
     }
 
     private void instantDrop(MoveEvent event) {
-        if (!gameStateManager.isPaused()) {
+        if (gameStateManager.canMove()) {
             MoveResultData result = eventListener.onInstantDropEvent(event);
             handleMoveResult(result);
         }
@@ -199,7 +199,7 @@ public class GameViewController implements Initializable {
     }
 
     private void hold(MoveEvent event) {
-        if (!gameStateManager.isPaused()) {
+        if (gameStateManager.canMove()) {
             GameStateView gameStateView = eventListener.onHoldEvent(event);
             if (gameStateView != null) {
                 brickRenderer.refreshBrick(gameStateView);

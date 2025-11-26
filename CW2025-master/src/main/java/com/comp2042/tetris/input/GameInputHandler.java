@@ -13,24 +13,24 @@ public class GameInputHandler {
         this.callback = callback;
     }
 
-    public void handleKeyPress(KeyEvent keyEvent, boolean isPaused, boolean isGameOver) {
+    public void handleKeyPress(KeyEvent keyEvent, boolean canMove, boolean canPause) {
         KeyCode code = keyEvent.getCode();
 
         // Global controls (work in most states)
-        if (code == KeyCode.N && !isPaused) {
+        if (code == KeyCode.N && canMove) {
             callback.onNewGame();
             keyEvent.consume();
             return;
         }
 
-        if (code == KeyCode.P && !isGameOver) {
+        if (code == KeyCode.P && canPause) {
             callback.onPause();
             keyEvent.consume();
             return;
         }
 
         // Game controls (only when active)
-        if (!isPaused && !isGameOver) {
+        if (canMove) {
             handleGameControls(code, keyEvent);
         }
     }

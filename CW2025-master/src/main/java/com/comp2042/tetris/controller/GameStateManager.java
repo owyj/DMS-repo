@@ -3,18 +3,18 @@ package com.comp2042.tetris.controller;
 import com.comp2042.tetris.util.MusicManager;
 import com.comp2042.tetris.view.component.GameOverPanel;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.layout.Pane;
+import com.comp2042.tetris.model.GameState;
+import com.comp2042.tetris.model.GameOverState;
+import com.comp2042.tetris.model.PausedState;
+import com.comp2042.tetris.model.PlayingState;
 
 public class GameStateManager {
     private final Timeline timeline;
     private final GameOverPanel gameOverPanel;
     private final Pane rootPane;
-    private final BooleanProperty isPaused = new SimpleBooleanProperty(false);
-    private final BooleanProperty isGameOver = new SimpleBooleanProperty(false);
-
     private final Runnable onNewGameCallback;
+    private GameState currentState;
 
     public GameStateManager(Timeline timeline, GameOverPanel gameOverPanel,
                             Pane rootPane, Runnable onNewGameCallback) {
@@ -22,31 +22,33 @@ public class GameStateManager {
         this.gameOverPanel = gameOverPanel;
         this.rootPane = rootPane;
         this.onNewGameCallback = onNewGameCallback;
+
+        this.currentState = new PlayingState();
     }
 
     // pause game
     public void pause() {
-        if (!isGameOver.get()) {
+        if (currentState.canPause()) {
             timeline.pause();
             MusicManager.getInstance().pauseMusic();
-            isPaused.set(true);
+            currentState = new PausedState();
         }
     }
 
     // resume game
     public void resume() {
-        if (!isGameOver.get()) {
+        if (currentState instanceof PausedState) {
             timeline.play();
             MusicManager.getInstance().playMusic();
-            isPaused.set(false);
+            currentState = new PlayingState();
         }
     }
 
     // toggle pause
     public void togglePause() {
-        if (isPaused.get()) {
+        if (currentState instanceof PausedState) {
             resume();
-        } else {
+        } else if (currentState instanceof PlayingState) {
             pause();
         }
     }
@@ -56,7 +58,7 @@ public class GameStateManager {
         timeline.stop();
         MusicManager.getInstance().pauseMusic();
 
-        isGameOver.set(true);
+        currentState = new GameOverState();
         gameOverPanel.setVisible(true);
 
         // Position the game over panel
@@ -82,8 +84,7 @@ public class GameStateManager {
         onNewGameCallback.run();
 
         timeline.play();
-        isPaused.set(false);
-        isGameOver.set(false);
+        currentState = new PlayingState();
     }
 
     // update game speed
@@ -98,26 +99,21 @@ public class GameStateManager {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        if (!isPaused.get() && !isGameOver.get()) {
+        if (currentState.canMove()) {
             timeline.play();
         }
     }
 
-    // getters
-    public boolean isPaused() {
-        return isPaused.get();
+    public boolean canMove() {
+        return currentState.canMove();
     }
 
-    public boolean isGameOver() {
-        return isGameOver.get();
+    public boolean canPause() {
+        return currentState.canPause();
     }
 
-    public BooleanProperty isPausedProperty() {
-        return isPaused;
-    }
-
-    public BooleanProperty isGameOverProperty() {
-        return isGameOver;
+    public String getCurrentStateName() {
+        return currentState.getStateName();
     }
 
 }
