@@ -2,6 +2,7 @@ package com.comp2042.tetris.model;
 
 import com.comp2042.tetris.model.piece.BrickRotator;
 import com.comp2042.tetris.dto.ClearRow;
+import com.comp2042.tetris.model.piece.types.NullBrick;
 import com.comp2042.tetris.util.MatrixOperations;
 import com.comp2042.tetris.dto.NextBrickInfo;
 import com.comp2042.tetris.model.piece.Brick;
@@ -10,6 +11,7 @@ import com.comp2042.tetris.model.piece.RandomBrickGenerator;
 import com.comp2042.tetris.dto.GameStateView;
 
 import java.awt.*;
+import java.util.List;
 
 public class GameBoard implements Board {
 
@@ -20,7 +22,7 @@ public class GameBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
-    private Brick heldBrick = null;
+    private Brick heldBrick = NullBrick.getInstance();
     private boolean canHold = true;
 
     public GameBoard(int width, int height) {
@@ -155,13 +157,19 @@ public class GameBoard implements Board {
 
     @Override
     public GameStateView getViewData() {
-        int[][] heldBrickData = heldBrick != null ? heldBrick.getShapeMatrix().get(0) : new int[4][4];
+        // Get the first rotation (index 0) from each brick's shape matrix
+        List<int[][]> heldShapes = heldBrick.getShapeMatrix();
+        List<int[][]> nextShapes = brickGenerator.getNextBrick().getShapeMatrix();
+
+        int[][] heldBrickData = heldShapes.get(0);
+        int[][] nextBrickData = nextShapes.get(0);
+
         Point ghostPosition = calculateGhostPosition();
         return new GameStateView(
                 brickRotator.getCurrentShape(),
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),
-                brickGenerator.getNextBrick().getShapeMatrix().get(0),
+                nextBrickData,
                 heldBrickData,
                 (int) ghostPosition.getX(),
                 (int) ghostPosition.getY()
@@ -222,14 +230,14 @@ public class GameBoard implements Board {
     @Override
     public Brick holdBrick() {
         if (!canHold) {
-            return null; //cannot hold again until new brick
+            return NullBrick.getInstance(); //cannot hold again until new brick
         }
         Brick currentBrick = brickRotator.getBrick();
         Brick temp = heldBrick;
         heldBrick = currentBrick;
         canHold = false; //disable further holds until new brick
-        if (temp != null) {
-            //swap with held brick
+
+        if (!(temp instanceof NullBrick)) {
             brickRotator.setBrick(temp);
         } else {
             //first time holding, create new brick
@@ -244,7 +252,7 @@ public class GameBoard implements Board {
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();
-        heldBrick = null; //clear held brick
+        heldBrick = NullBrick.getInstance(); //clear held brick
         canHold = true;
         createNewBrick();
     }
