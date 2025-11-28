@@ -201,9 +201,9 @@ https://github.com/owyj/DMS-repo
 
 ## Modified Java Classes
 
-### 1. Core Model Classes
+### 1. Core Model Classes 
 
-#### a. `model/GameBoard.java` (formerly `SimpleBoard.java`)
+##### a. `model/GameBoard.java` (formerly `SimpleBoard.java`)
 
 | Change | Description |
 |--------|-------------|
@@ -218,9 +218,7 @@ https://github.com/owyj/DMS-repo
 
 **Rationale:** Supports new gameplay features (hold, ghost piece) and improves rotation mechanics.
 
----
-
-#### b. `model/Score.java`
+##### b. `model/Score.java`
 
 | Change | Description |
 |--------|-------------|
@@ -233,9 +231,7 @@ https://github.com/owyj/DMS-repo
 
 **Rationale:** Implements high score tracking and persistence for player engagement.
 
----
-
-#### c. `model/Board.java`
+##### c. `model/Board.java`
 
 | Change | Description |
 |--------|-------------|
@@ -248,7 +244,7 @@ https://github.com/owyj/DMS-repo
 
 ### 2. Brick Generation
 
-#### a. `model/piece/RandomBrickGenerator.java`
+##### a. `model/piece/RandomBrickGenerator.java`
 
 | Change | Description |
 |--------|-------------|
@@ -261,9 +257,7 @@ https://github.com/owyj/DMS-repo
 
 **Rationale:** Fairer piece distribution prevents long droughts of specific pieces.
 
----
-
-#### b. `model/piece/BrickRotator.java`
+##### b. `model/piece/BrickRotator.java`
 
 | Change | Description |
 |--------|-------------|
@@ -288,7 +282,7 @@ https://github.com/owyj/DMS-repo
 
 ### 4. View and Rendering
 
-#### a. `view/GameViewController.java` (formerly `GuiController.java`)
+##### a. `view/GameViewController.java` (formerly `GuiController.java`)
 
 | Change | Description |
 |--------|-------------|
@@ -303,9 +297,7 @@ https://github.com/owyj/DMS-repo
 
 **Rationale:** Separation of concerns for maintainability.
 
----
-
-#### b. `view/component/NotificationPanel.java`
+##### b. `view/component/NotificationPanel.java`
 
 | Change | Description |
 |--------|-------------|
@@ -317,7 +309,7 @@ https://github.com/owyj/DMS-repo
 
 ### 5. Controller
 
-#### a. `controller/GameController.java`
+##### a. `controller/GameController.java`
 
 | Change | Description |
 |--------|-------------|
@@ -334,7 +326,7 @@ https://github.com/owyj/DMS-repo
 
 ### 6. Input Handling
 
-#### a. `input/InputEventListener.java`
+##### a. `input/InputEventListener.java`
 
 | Change | Description |
 |--------|-------------|
@@ -347,7 +339,7 @@ https://github.com/owyj/DMS-repo
 
 ### 7. Utilities
 
-#### a. `util/MatrixOperations.java`
+##### a. `util/MatrixOperations.java`
 
 | Change | Description |
 |--------|-------------|
@@ -363,7 +355,7 @@ https://github.com/owyj/DMS-repo
 
 ### 8. Application Entry
 
-#### a. `app/Main.java`
+##### a. `app/Main.java`
 
 | Change | Description |
 |--------|-------------|
